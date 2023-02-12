@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class App
+class Interpreter
+class Parser
+class Tokenizer
+class ReadFile
+class Atom
+enum Tokens
+
+App *- Interpreter
+Interpreter *- Parser
+Interpreter o-- Rules
+Parser *- Tokenizer
+App o-- ReadFile
+Tokenizer o-- Tokens
+Atom *-- Interpreter
+Atom *-- Parser
+
+class App {
+    + main(String[] args)
+    - getExpresionFromFile(String)
+}
+class Interpreter {
+    + String interpret(Atom);
+}
+
+class Parser {
+    + parseTree (List<Tokens>) : Atom
+    - parseNode (List<Tokens>) : Atom
+}
+
+class Tokenizer {
+    + Tokenize(String) : List<Tokens>
+    - Prepare(String)
+}
+
+class Atom {
+    - List<Object> : data
+    - Atom : parent
+    + getParent() : Atom
+    + car() : Object
+    + cdr() : List<Object>
+}
+
+class ReadFile {
+    + getFileAsString(File) : String
+}
+
+enum Rules{
+    SUM
+    REST
+    MULTIPLICATION
+    DIVISION
+    PRINT
+    QUOTE
+    CAR
+    CDR
+}
+
+enum Tokens {
+    OPENER
+    CLOSER
+    OPERATOR
+    NUMBER
+    TEXT
+    SYMBOL
+}
+
+@enduml
