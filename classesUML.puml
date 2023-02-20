@@ -1,71 +1,81 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-class App
-class Interpreter
+class Lisp
+class Lexer
 class Parser
-class Tokenizer
-class ReadFile
+class Interpreter
+
+Lisp ..> Lexer
+Lisp ..> Parser
+Lisp ..> Interpreter
+
+abstract class TreeNode
 class Atom
-enum Tokens
+class SExpression
 
-App *- Interpreter
-Interpreter *- Parser
-Interpreter o-- Rules
-Parser *- Tokenizer
-App o-- ReadFile
-Tokenizer o-- Tokens
-Atom *-- Interpreter
-Atom *-- Parser
+class PrimitiveFunctions
+class SymbolPatterns
 
-class App {
-    + main(String[] args)
-    - getExpresionFromFile(String)
-}
-class Interpreter {
-    + String interpret(Atom);
+Parser "uses" ..> TreeNode
+
+TreeNode <|-- "inherits" Atom
+TreeNode <|-- "inherits" SExpression
+SExpression "contains" o--> Atom
+ PrimitiveFunctions <- SExpression
+
+class Lexer {
+    + getTokens( Stream ) : ArrayList<String>
+    - streamToString (Stream) : String
+    - prepare( Stream ) : String
+    - divide (String) : ArrayList<String>
 }
 
 class Parser {
-    + parseTree (List<Tokens>) : Atom
-    - parseNode (List<Tokens>) : Atom
+    + buildTree ( ArrayList<String> ) : TreeNode
 }
 
-class Tokenizer {
-    + Tokenize(String) : List<Tokens>
-    - Prepare(String)
+class Interpreter {
+    + evaluate (TreeNode) : String
+}
+
+class TreeNode <<Abstract>>{
+    # tokens : ArrayList<String>
+    + isList () : Boolean
+    + evaluate() : TreeNode
+    + toString() : String
+    + create ( ArrayList<String> ) : TreeNode
+    + create ( boolean ) : TreeNode
+    + create ( int ) : TreeNode
+
 }
 
 class Atom {
-    - List<Object> : data
-    - Atom : parent
-    + getParent() : Atom
-    + car() : Object
-    + cdr() : List<Object>
+    - value : String
+    + toString() : String
 }
 
-class ReadFile {
-    + getFileAsString(File) : String
+class SExpression {
+    'Talvez los tokens no sen necesarios'
+    # tokens : ArrayList<String>
+    - childNodes : ArrayList<TreeNode>
+    + toString() : String
+    - isValid(String) : boolean
+    - getNextClosedParentesis (int start)
 }
 
-enum Rules{
-    SUM
-    REST
-    MULTIPLICATION
-    DIVISION
-    PRINT
-    QUOTE
-    CAR
-    CDR
-}
+class PrimitiveFunctions{
+   + SUM( SExpression )
+   + SUBTRACTION( SExpression )
+   + DIVISION( SExpression )
+   + MULTIPLICATION( SExpression )
+   + CAR ( SExpression )
+   + CDR ( SExpression )
+   + SETQ ( SExpression )
+   + COND ( SExpression )
+   + QUOTE ( SExpression )
+   + ATOM ( SExpression )
+   + DEFUN ( SExpression )
 
-enum Tokens {
-    OPENER
-    CLOSER
-    OPERATOR
-    NUMBER
-    TEXT
-    SYMBOL
 }
-
 @enduml
