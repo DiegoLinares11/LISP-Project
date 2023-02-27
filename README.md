@@ -7,11 +7,19 @@
 
 </h1>
 
-Elaborado con java 17 y maven.  
+Elaborado con java 17 y maven.
 
-**Código fuente:**  [*Aquí*](https://github.com/DanielRasho/HT4-InfixCalculator/tree/main/App_main/src/main/java)  
+**Código fuente:**  [***Aquí***](https://github.com/DiegoLinares11/LISP-Project/tree/master/src/main/java/org/project)  
 
-**Unit Test:** [*Aquí*](https://github.com/DanielRasho/HT4-InfixCalculator/tree/main/App_main/src/test/java/App_main)  
+**Unit Test:** [***Aquí***](https://github.com/DiegoLinares11/LISP-Project/tree/master/src/test/java/org/project)  
+
+## Indice
+
+- [Guia de Uso](#guia-de-uso)
+  
+  - [Problemas en Windows](#problemas-en-windows)
+
+- [¿Como funciona?](#¿Como-funciona?)
 
 ## Guia de Uso
 
@@ -41,22 +49,26 @@ Elaborado con java 17 y maven.
    java -jar ./javaLisp.jar ./Fibonacci.lisp
    ```
 
-#### Windows
+#### Problemas en Windows
 
 Antes de ejecutarlo, asegurarse que el Java(TM) Platform SE binary, esta activado. 
 
-<img title="" src="./media/jarr.gif" alt="" width="465" data-align="center">
+<img title="" src="./media/jarr.gif" alt="" width="673" data-align="center">
 
-## UML de clases
+## ¿Como funciona?
+
+Todo esta explicado con detalle en la  [**WIKI**](https://github.com/DiegoLinares11/LISP-Project/wiki) :question:
+
+Pero para empezar el interpreta se compone de 3 partes principales
+
+1. **Lexer**: Rompe una expresion dado en palabras significativas llamadas *"tokens"*
+
+2. **Parser**: Recibe una lista de *tokens* y los analiza segun unas reglas gramáticas, para luego construir *"árboles de nodos"* que representan instrucciones que si pueden ser ejecutadas por java ( o ll lenguaje que se desee).
+
+3. **Interpreter**: Recibe arboles de instrucciones y los ejecuta.
+
+
+
+A continuacion puedes ver un Diagrama UML de todas las clases y como se relacionan entre ellas:
 
 ![](./classesUML.png)
-
-## Colaboradores
-
-- Daniel Rayo 22933
-
-- Diego Linares 221256
-
-- Luis
-
-
