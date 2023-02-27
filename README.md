@@ -19,7 +19,7 @@ Elaborado con java 17 y maven.
   
   - [Problemas en Windows](#problemas-en-windows)
 
-- [¿Como funciona?](#¿Como-funciona?)
+- [¿Como funciona?](#como-funciona)
 
 ## Guia de Uso
 
