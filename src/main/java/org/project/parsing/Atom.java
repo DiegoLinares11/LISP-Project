@@ -1,7 +1,5 @@
 package org.project.parsing;
 
-import org.project.lexing.Patterns;
-
 public class Atom extends TreeNode {
 
     String value;
@@ -11,13 +9,14 @@ public class Atom extends TreeNode {
     }
 
     public Atom (boolean boolValue){
-        this.value = boolValue ? "T" : "NIL";
-        tokens.add(value);
-    }
+        this.value = boolValue ? "T" : "NIL";}
 
     public Atom (int numeric){
         this.value = Integer.toString(numeric);
-        tokens.add(value);
+    }
+
+    public Atom (double numeric){
+        this.value = Double.toString(numeric);
     }
 
     @Override
@@ -26,8 +25,11 @@ public class Atom extends TreeNode {
     }
 
     @Override
-    public TreeNode evaluate() {
-        return this;
+    public TreeNode evaluate(Context context) {
+        if(context.variableExist(this.value))
+            return context.getVariable(this.value);
+        else
+            return this;
     }
 
     @Override

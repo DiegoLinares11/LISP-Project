@@ -5,7 +5,6 @@ import java.util.List;
 
 abstract class TreeNode {
 
-    protected List<String> tokens = new ArrayList<>();
     protected List<TreeNode> childNodes = new ArrayList<>();
 
     // Recibes a valid expression (no missing parenthesis)
@@ -33,9 +32,13 @@ abstract class TreeNode {
         return new Atom(numeric);
     }
 
+    public List<TreeNode> getChildNodes() {
+        return childNodes;
+    }
+
     abstract public boolean isSExpression();
 
-    abstract public TreeNode evaluate();
+    abstract public TreeNode evaluate(Context context);
 
     @Override
     public String toString() {

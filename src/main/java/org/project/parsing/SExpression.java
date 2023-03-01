@@ -2,6 +2,9 @@ package org.project.parsing;
 
 import org.project.lexing.Lexer;
 import org.project.lexing.Patterns;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SExpression extends TreeNode{
@@ -16,14 +19,50 @@ public class SExpression extends TreeNode{
         instanceHelper(tokens);
     }
 
+    public SExpression(ArrayList<TreeNode> nodes){
+        this.childNodes = nodes;
+    }
+
     @Override
     public boolean isSExpression() {
         return true;
     }
 
     @Override
-    public TreeNode evaluate() {
-        return null;
+    public TreeNode evaluate(Context context) {
+        // Interchanging variables.
+        for(int i=0; i < childNodes.size(); i++){
+            TreeNode childNode = this.childNodes.get(i);
+            this.childNodes.set(i, childNode.evaluate(context));
+        }
+        // Evaluating child nodes.
+        String operator = this.car().toString(); // Operators are always in the first position.
+        SExpression operators = this.cdr();
+        TreeNode result = null;
+        if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
+            switch (operator){
+                case "+" -> result = PrimitiveFunctions.add(operators);
+                case "-" -> result = PrimitiveFunctions.subtraction(operators);
+                case "*" -> result = PrimitiveFunctions.multiplication(operators);
+                case "/" -> result = PrimitiveFunctions.division(operators);
+            }
+        else
+            result = childNodes.get(0); // Reached only when and expression is totally evaluate.
+        return result;
+    }
+
+    public TreeNode car(){
+        if (this.childNodes.size() == 0)
+            throw new RuntimeException("Expression has no child-nodes");
+        return this.childNodes.get(0);
+    }
+
+    public SExpression cdr(){
+        if (this.childNodes.size() < 1)
+            throw new RuntimeException("Expression has no enough child-nodes");
+        return new SExpression(new ArrayList<>(
+                this.childNodes.subList(1, this.childNodes.size())
+        ));
     }
 
     private boolean isValid(List<String> tokens){
@@ -57,7 +96,6 @@ public class SExpression extends TreeNode{
     }
 
     private void instanceHelper(List<String> tokens){
-        this.tokens = tokens;
         if (!isValid(tokens))
             throw new RuntimeException("Error: Uneven amount of parenthesis.");
 
@@ -76,5 +114,18 @@ public class SExpression extends TreeNode{
                 index++;
             }
         }
+    }
+
+    private TreeNode findPrimitiveFunction(String name, SExpression args, Class primitiveFunctions) throws Exception {
+        Method m;
+        m = primitiveFunctions.getDeclaredMethod(name, SExpression.class);
+        m.setAccessible(true);
+        Object o = m.invoke(null, args);
+        if (o.toString().matches("true"))
+            return new Atom("T");
+        else if (o.toString().matches("false"))
+            return new Atom("NIL");
+        else
+            return (TreeNode) o;
     }
 }
