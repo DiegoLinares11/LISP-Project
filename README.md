@@ -1,6 +1,6 @@
 <h1 align="center">
     <img src="./media/lispLogo.png" width="200px">
-    <h1 align="center" style="font-style:italic;">Lisp x Java</h1>
+    <h1 align="center" style="font-style:italic;">JLisp</h1>
     <h5 align="center">
     <i style="color:grey;"> Una pequeña implementacion de Lisp en Java</i>
     </h5>
