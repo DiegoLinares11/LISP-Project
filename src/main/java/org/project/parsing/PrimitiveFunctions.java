@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 public class PrimitiveFunctions {
 
     //#######################################
-    //--------- ARITHMETIC OPERATORS -------
+    //--------- EXPRESSION SEPARATORS -------
     //#######################################
 
     public static TreeNode car (SExpression expression){
@@ -19,6 +19,24 @@ public class PrimitiveFunctions {
         areArgumentsValid(expression, "cdr", 1, Integer::equals);
         return expression.cdr();
     }
+
+    //#######################################
+    //--------- EXPRESSION EVALUATORS -------
+    //#######################################
+
+    public static TreeNode eval (SExpression expression, Context context){
+        areArgumentsValid(expression, "eval", 1, Integer::equals);
+        return expression.childNodes.get(0).evaluate(context);
+    }
+
+    public static TreeNode quote (SExpression expression){
+        areArgumentsValid(expression, "quote", 1, Integer::equals);
+        return expression;
+    }
+
+    //#######################################
+    //--------- ARITHMETIC OPERATORS -------
+    //#######################################
 
     public static TreeNode add (SExpression expression){
         areArgumentsValid(expression, "add", 0,
@@ -116,6 +134,15 @@ public class PrimitiveFunctions {
         return new Atom(operand1 >= operand2);
     }
 
+    public static TreeNode atom(SExpression expression){
+        areArgumentsValid(expression, "atom", 1, Integer::equals);
+        TreeNode operand = expression.car();
+        return  new Atom(operand.isSExpression());
+    }
+
+    //#######################################
+    //--------- CONDITIONALS -------
+    //#######################################
 
     /**
      * Prints the following Node, and return it.

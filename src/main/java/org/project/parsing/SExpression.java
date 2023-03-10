@@ -3,6 +3,7 @@ package org.project.parsing;
 import org.project.lexing.Lexer;
 import org.project.lexing.Patterns;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,30 +33,38 @@ public class SExpression extends TreeNode{
         // Interchanging variables and evaluating child nodes..
         for(int i=0; i < childNodes.size(); i++){
             TreeNode childNode = this.childNodes.get(i);
-            this.childNodes.set(i, childNode.evaluate(context));
+            if(childNode.toString().equals("quote"))
+                break;
+            else
+                this.childNodes.set(i, childNode.evaluate(context));
         }
         // Evaluating Expression.
         String operator = this.car().toString(); // Operators are always in the first position.
-        SExpression operators = this.cdr();
+        SExpression operands = this.cdr();
         TreeNode result = null;
-        if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
+        if (operands.childNodes.isEmpty()) // Reached only when and expression is totally evaluate.
+            return childNodes.get(0);
+        else if (operator.equals("eval"))
+            return PrimitiveFunctions.eval(operands, context);
+        else if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
             switch (operator){
-                case "+" -> result = PrimitiveFunctions.add(operators);
-                case "-" -> result = PrimitiveFunctions.subtraction(operators);
-                case "*" -> result = PrimitiveFunctions.multiplication(operators);
-                case "/" -> result = PrimitiveFunctions.division(operators);
+                case "+" -> result = PrimitiveFunctions.add(operands);
+                case "-" -> result = PrimitiveFunctions.subtraction(operands);
+                case "*" -> result = PrimitiveFunctions.multiplication(operands);
+                case "/" -> result = PrimitiveFunctions.division(operands);
             }
         else if (operator.matches(Patterns.LOGIC_OPERATOR))
             switch (operator){
-                case "=" -> result = PrimitiveFunctions.eq(operators);      // Equal
-                case "/=" -> result = PrimitiveFunctions.ne(operators);     // Not equal
-                case ">" -> result = PrimitiveFunctions.gt(operators);      // Greater than
-                case ">=" -> result = PrimitiveFunctions.ge(operators);     // Greater or equal than
-                case "<" -> result = PrimitiveFunctions.lt(operators);      // Less than
-                case "<=" -> result = PrimitiveFunctions.le(operators);     // Less or equal than
+                case "=" -> result = PrimitiveFunctions.eq(operands);      // Equal
+                case "/=" -> result = PrimitiveFunctions.ne(operands);     // Not equal
+                case ">" -> result = PrimitiveFunctions.gt(operands);      // Greater than
+                case ">=" -> result = PrimitiveFunctions.ge(operands);     // Greater or equal than
+                case "<" -> result = PrimitiveFunctions.lt(operands);      // Less than
+                case "<=" -> result = PrimitiveFunctions.le(operands);     // Less or equal than
             }
-        else
-            result = childNodes.get(0); // Reached only when and expression is totally evaluate.
+        else {
+            result = findPrimitiveFunction(operator, operands, PrimitiveFunctions.class);
+        }
         return result;
     }
 
@@ -124,16 +133,25 @@ public class SExpression extends TreeNode{
         }
     }
 
-    private TreeNode findPrimitiveFunction(String name, SExpression args, Class primitiveFunctions) throws Exception {
+    private TreeNode findPrimitiveFunction(String name, SExpression args, Class primitiveFunctions){
         Method m;
-        m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), SExpression.class);
-        m.setAccessible(true);
-        Object o = m.invoke(null, args);
-        if (o.toString().matches("true"))
-            return new Atom("T");
-        else if (o.toString().matches("false"))
-            return new Atom("NIL");
-        else
-            return (TreeNode) o;
+        Object o = null;
+        try {
+            m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), SExpression.class);
+            m.setAccessible(true);
+            o = m.invoke(null, args);
+            if (o.toString().matches("true"))
+                return new Atom("T");
+            else if (o.toString().matches("false"))
+                return new Atom("NIL");
+            else
+                return (TreeNode) o;
+
+        } catch (InvocationTargetException e) {
+            System.out.println(e.getCause().getMessage());
+        }catch (Exception e){
+            throw new RuntimeException("Operator " + name + " Does NOT exist.");
+        }
+        return (TreeNode) o;
     }
 }
