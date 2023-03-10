@@ -39,7 +39,7 @@ public class Lexer {
      * @return A list of the tokens contained in the input.
      */
     public List<String> getTokens(String expression){
-        String depurateTokens = wrap(prepare(expression));  // Remove extra whitespaces and newlines, and wrap it.
+        String depurateTokens = prepare(wrap(expression));  // Remove extra whitespaces and newlines, and wrap it.
         return divide(depurateTokens);                      // Divide the tokens by whitespaces.
     }
 
@@ -51,11 +51,12 @@ public class Lexer {
      * @return A String ready to be chopped in tokens..
      */
     private String prepare (String expression){
-        return expression.trim()
+        return expression
                 .replace(")", " ) ")
                 .replace("(", " ( ")
-                .replace("\n", "")
-                .replaceAll("\\s+", " ");
+                .replace("\n", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
 
 
@@ -79,6 +80,6 @@ public class Lexer {
      * @return
      */
     private String wrap (String expression){
-        return "(" + expression + ")";
+        return "( " + expression + " )";
     }
 }

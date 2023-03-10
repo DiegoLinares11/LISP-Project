@@ -15,13 +15,14 @@ public class LexerTest {
     @Test
     public void getTokensTest(){
         String expression = "1 ( ) \n some Tokens";
-        List<String> expectedArray = Arrays.asList("1", "(", ")", "some", "Tokens");
+        List<String> expectedArray = Arrays.asList("(","1", "(", ")", "some", "Tokens", ")");
         Lexer l = new Lexer();
+        List<String> a = l.getTokens(expression);
         assertTrue(expectedArray.equals(l.getTokens(expression)));
     }
     @Test
     public void getTokensFromStream(){
-        List<String> expectedArray = Arrays.asList("This", "is", "a", "test", "another", "line");
+        List<String> expectedArray = Arrays.asList("(", "This", "is", "a", "test", "another", "line", ")");
         InputStream stream = null;
         try {
             stream = new FileInputStream(new File("./testFiles/getTokensTest.txt"));
