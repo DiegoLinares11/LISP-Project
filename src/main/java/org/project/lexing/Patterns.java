@@ -11,7 +11,7 @@ public class Patterns {
     public static final String LITERAL = "[a-zA-Z0-9]+";
     public static final String VALID_FUNCTION_NAME = "[a-zA-Z][a-zA-Z0-9]*";
     public static final String ARITHMETIC_OPERATOR = "[+\\-*/]";
-    public static final String LOGIC_OPERATOR = "=|<|>|<=|>=";
+    public static final String LOGIC_OPERATOR = "=|<|>|<=|>=|/=";
     public static final String EXPRESSION_OPENER = "\\(";
     public static final String EXPRESSION_CLOSER = "\\)";
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SExpression extends TreeNode{
-
     public SExpression(List<String> tokens){
         instanceHelper(tokens);
     }
@@ -30,12 +29,12 @@ public class SExpression extends TreeNode{
 
     @Override
     public TreeNode evaluate(Context context) {
-        // Interchanging variables.
+        // Interchanging variables and evaluating child nodes..
         for(int i=0; i < childNodes.size(); i++){
             TreeNode childNode = this.childNodes.get(i);
             this.childNodes.set(i, childNode.evaluate(context));
         }
-        // Evaluating child nodes.
+        // Evaluating Expression.
         String operator = this.car().toString(); // Operators are always in the first position.
         SExpression operators = this.cdr();
         TreeNode result = null;
@@ -45,6 +44,15 @@ public class SExpression extends TreeNode{
                 case "-" -> result = PrimitiveFunctions.subtraction(operators);
                 case "*" -> result = PrimitiveFunctions.multiplication(operators);
                 case "/" -> result = PrimitiveFunctions.division(operators);
+            }
+        else if (operator.matches(Patterns.LOGIC_OPERATOR))
+            switch (operator){
+                case "=" -> result = PrimitiveFunctions.eq(operators);      // Equal
+                case "/=" -> result = PrimitiveFunctions.ne(operators);     // Not equal
+                case ">" -> result = PrimitiveFunctions.gt(operators);      // Greater than
+                case ">=" -> result = PrimitiveFunctions.ge(operators);     // Greater or equal than
+                case "<" -> result = PrimitiveFunctions.lt(operators);      // Less than
+                case "<=" -> result = PrimitiveFunctions.le(operators);     // Less or equal than
             }
         else
             result = childNodes.get(0); // Reached only when and expression is totally evaluate.
@@ -101,8 +109,8 @@ public class SExpression extends TreeNode{
 
         for (int index=1; index < tokens.size();) {
             String token = tokens.get(index);
-            if (token.matches(Patterns.NUMBER) || token.matches(Patterns.BOOLEAN)
-                    || token.matches(Patterns.LITERAL) || token.matches(Patterns.ARITHMETIC_OPERATOR)){
+            if (token.matches(Patterns.NUMBER) || token.matches(Patterns.BOOLEAN) || token.matches(Patterns.LITERAL)
+                    || token.matches(Patterns.ARITHMETIC_OPERATOR) || token.matches(Patterns.LOGIC_OPERATOR)){
                 this.childNodes.add(new Atom(token));
                 index ++;
             } else if (token.matches(Patterns.EXPRESSION_OPENER)) {
@@ -118,7 +126,7 @@ public class SExpression extends TreeNode{
 
     private TreeNode findPrimitiveFunction(String name, SExpression args, Class primitiveFunctions) throws Exception {
         Method m;
-        m = primitiveFunctions.getDeclaredMethod(name, SExpression.class);
+        m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), SExpression.class);
         m.setAccessible(true);
         Object o = m.invoke(null, args);
         if (o.toString().matches("true"))
