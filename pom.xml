@@ -32,7 +32,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>App_main.App</mainClass>
+              <mainClass>org.project.Lisp</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

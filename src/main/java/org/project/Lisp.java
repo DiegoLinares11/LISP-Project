@@ -2,7 +2,7 @@ package org.project;
 
 import java.io.File;
 
-/**Class for starting execution*/
+/** Class for starting LISP INTERPRETER EXECUTION. */
 public class Lisp
 {
     /** Starts execution by getting the file where operations are*/
