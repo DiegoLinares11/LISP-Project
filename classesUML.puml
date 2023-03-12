@@ -32,7 +32,7 @@ class SymbolPatterns{
 }
 
 Parser "uses" ..> TreeNode
-
+SymbolPatterns "uses" ...> SExpression
 TreeNode <|-- "inherits" Atom
 TreeNode <|-- "inherits" SExpression
 SExpression "contains" o--> Atom
