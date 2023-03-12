@@ -20,18 +20,23 @@ public class PrimitiveFunctions {
         return expression.cdr();
     }
 
+    public static TreeNode list (SExpression expression){
+        areArgumentsValid(expression, "list", 0, (args, reqArgs) -> args > reqArgs);
+        return expression;
+    }
+
     //#######################################
     //--------- EXPRESSION EVALUATORS -------
     //#######################################
 
     public static TreeNode eval (SExpression expression, Context context){
         areArgumentsValid(expression, "eval", 1, Integer::equals);
-        return expression.childNodes.get(0).evaluate(context);
+        return expression.getChildNodes().get(0).evaluate(context);
     }
 
     public static TreeNode quote (SExpression expression){
         areArgumentsValid(expression, "quote", 1, Integer::equals);
-        return expression;
+        return expression.car();
     }
 
     //#######################################
@@ -137,7 +142,23 @@ public class PrimitiveFunctions {
     public static TreeNode atom(SExpression expression){
         areArgumentsValid(expression, "atom", 1, Integer::equals);
         TreeNode operand = expression.car();
-        return  new Atom(operand.isSExpression());
+        return  new Atom(operand.isAtom());
+    }
+
+    //#######################################
+    //--------- EXPRESSION EVALUATORS -------
+    //#######################################
+
+    public static TreeNode setq(SExpression expression, Context context){
+        areArgumentsValid(expression, "setq", 2, Integer::equals);
+        TreeNode variableName = expression.car();
+        if (!variableName.toString().matches(Patterns.VALID_VARIABLE_NAME))
+            throw new RuntimeException("\n\tERROR on : setq" + expression.toString()
+                    + "\n\tIlegal variable name: " + variableName.toString()
+                    + "\n\tArgs must follow regex pattern: " + Patterns.VALID_FUNCTION_NAME);
+        TreeNode variableValue = expression.getChildNodes().get(1);
+        context.setVariable(variableName.toString(), variableValue);
+        return null;
     }
 
     //#######################################
@@ -152,7 +173,7 @@ public class PrimitiveFunctions {
     public static TreeNode print(SExpression expression){
         areArgumentsValid(expression, "print", 1, Integer::equals);
         System.out.println(expression.car().toString());
-        return expression;
+        return null;
     }
 
     private static double nodeAsNumeric (TreeNode node){
@@ -168,7 +189,7 @@ public class PrimitiveFunctions {
         if (expression.getChildNodes().size() == 0)
             throw new RuntimeException("No operands given for: " + functionName);
         if (!requiredArgs.apply(expression.getChildNodes().size(), numArgs))
-            throw new RuntimeException("Invalid number of arguments for \"eq\" function."
+            throw new RuntimeException("Invalid number of arguments for \"" + functionName+ "\" function."
                 + "\n Required: " + numArgs
                 + "\n Given: " + expression.getChildNodes().size());
     }

@@ -73,13 +73,13 @@ public class Lexer {
 
     /**
      * Adds "(" ")" at the start and end of and expression.
-     * Used to make sure everything is wrapped within an expression
+     * Used to make sure everything is wrapped within a big SExpression.
      * Ex input : " + 3 2 "
      * Ex output : " ( + 3 2 ) "
      * @param expression
      * @return
      */
     private String wrap (String expression){
-        return "( " + expression + " )";
+        return "( list " + expression + " )"; // "list" is added, at the root Node, son can be evaluated.
     }
 }

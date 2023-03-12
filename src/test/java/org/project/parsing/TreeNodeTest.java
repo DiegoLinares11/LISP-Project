@@ -10,14 +10,14 @@ public class TreeNodeTest {
     public void getInstance() {
         TreeNode s = new SExpression("(+ 2 (+ 1 2))");
         System.out.println(s.toString());
-        assertEquals(s.toString(), "[[+, 2, [+, 1, 2]]]");
+        assertEquals("[list, [+, 2, [+, 1, 2]]]", s.toString());
     }
 
     @Test
     public void getInstance2() {
         TreeNode s = new SExpression("(defun owo (a b) (+ a b))");
         System.out.println(s.toString());
-        assertEquals(s.toString(), "[[defun, owo, [a, b], [+, a, b]]]");
+        assertEquals("[list, [defun, owo, [a, b], [+, a, b]]]", s.toString());
     }
 
     @Test

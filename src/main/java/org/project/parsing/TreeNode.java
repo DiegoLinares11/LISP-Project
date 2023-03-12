@@ -64,9 +64,9 @@ abstract class TreeNode {
     }
 
     /**
-     * @return True : is a Expression, False: is an atom.
+     * @return True : is a Atom, False: is an SExpression.
      */
-    abstract public boolean isSExpression();
+    abstract public boolean isAtom();
 
     /**
      * Evaluate a given node recursively, and return a new node with the value.

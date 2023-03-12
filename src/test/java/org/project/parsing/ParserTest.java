@@ -10,14 +10,14 @@ public class ParserTest {
     public void buildNodeTree() {
         Parser p = new Parser();
         TreeNode tree = p.buildNodeTree("(+ 2 (+ 1 2))");
-        assertEquals(tree.toString(), "[[+, 2, [+, 1, 2]]]");
+        assertEquals("[list, [+, 2, [+, 1, 2]]]", tree.toString());
     }
 
     @Test
     public void buildNodeTree2() {
         Parser p = new Parser();
         TreeNode tree = p.buildNodeTree("(defun owo (a b) (+ a b))");
-        assertEquals(tree.toString(), "[[defun, owo, [a, b], [+, a, b]]]");
+        assertEquals(tree.toString(), "[list, [defun, owo, [a, b], [+, a, b]]]");
     }
 
     @Test

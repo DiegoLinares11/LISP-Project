@@ -47,8 +47,8 @@ public class Atom extends TreeNode {
      * @return False, because an Atom IS NOT an SExpression.
      */
     @Override
-    public boolean isSExpression() {
-        return false;
+    public boolean isAtom() {
+        return true;
     }
 
     /**

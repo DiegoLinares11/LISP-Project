@@ -47,29 +47,26 @@ public class SExpression extends TreeNode{
      * @return True, because SExpression IS an SExpression.
      */
     @Override
-    public boolean isSExpression() {
-        return true;
+    public boolean isAtom() {
+        return false;
     }
 
+    /**
+     * Evaluates this Sexpression recursively, by first evaluating its Child Nodes, and then
+     * evaluating itself.
+     * @param context Context of user defined variables and functions.
+     * @return Tree node containing the result.
+     */
     @Override
     public TreeNode evaluate(Context context) {
         // Interchanging variables and evaluating child nodes.
-        for(int i=0; i < childNodes.size(); i++){
-            TreeNode childNode = this.childNodes.get(i);
-            if(childNode.toString().equals("quote"))
-                break;
-            else
-                this.childNodes.set(i, childNode.evaluate(context));
-        }
-        // Evaluating Expression.
+        evaluateChildNodes(context);
+
+        // Evaluating Expression itself.
         String operator = this.car().toString(); // Operators are always in the first position.
         SExpression operands = this.cdr();
         TreeNode result = null;
-        if (operands.childNodes.isEmpty()) // Reached only when and expression is totally evaluate.
-            return childNodes.get(0);
-        else if (operator.equals("eval"))
-            return PrimitiveFunctions.eval(operands, context);
-        else if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
+        if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
             switch (operator){
                 case "+" -> result = PrimitiveFunctions.add(operands);
                 case "-" -> result = PrimitiveFunctions.subtraction(operands);
@@ -85,10 +82,34 @@ public class SExpression extends TreeNode{
                 case "<" -> result = PrimitiveFunctions.lt(operands);      // Less than
                 case "<=" -> result = PrimitiveFunctions.le(operands);     // Less or equal than
             }
+        else if (operator.equals("eval"))
+            result = PrimitiveFunctions.eval(operands, context);
+        else if (operator.equals("setq"))
+            result = PrimitiveFunctions.setq(operands, context);
         else {
+            // If nothing works, check if operator is an user defined function.
             result = findPrimitiveFunction(operator, operands, PrimitiveFunctions.class);
         }
         return result;
+    }
+
+    private void evaluateChildNodes(Context context){
+        List<TreeNode> newChildNodes = new ArrayList<>();
+        // Interchanging variables and evaluating child nodes.
+        for(TreeNode childNode : this.childNodes){
+            if(childNode.toString().matches("quote|setq")){ // If operator is "quote" or "setq" STOP evaluation.
+                newChildNodes = this.childNodes;
+                break;
+            }
+            else if (context.variableExist(childNode.toString()))
+                newChildNodes.add(context.getVariable(childNode.toString()));
+            else{
+                TreeNode evaluation = childNode.evaluate(context);
+                if (evaluation != null) // Just adding those child nodes which do not evaluate to null;
+                    newChildNodes.add(evaluation);
+            }
+        }
+        this.childNodes = newChildNodes;
     }
 
     /**
@@ -202,7 +223,8 @@ public class SExpression extends TreeNode{
     }
 
     /**
-     * Try to find a primitive lisp function within a class, invoke it, and return the evaluated TreeNode..
+     * Try to find a primitive lisp function within a class through Java Reflection,
+     * invoke it, and return the evaluated TreeNode..
      * @param name Primitive function name you want to execute. (atom, setq, cond)
      * @param args Function's args.
      * @param primitiveFunctions Class to search in.
@@ -215,17 +237,14 @@ public class SExpression extends TreeNode{
             m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), SExpression.class);
             m.setAccessible(true);
             o = m.invoke(null, args);
-            if (o.toString().matches("true"))
-                return new Atom("T");
-            else if (o.toString().matches("false"))
-                return new Atom("NIL");
+            if (o.toString().matches(Patterns.BOOLEAN))
+                return new Atom(o.toString());
             else
                 return (TreeNode) o;
-
         } catch (InvocationTargetException e) {
             System.out.println(e.getCause().getMessage());
-        }catch (Exception e){
-            throw new RuntimeException("Operator " + name + " Does NOT exist.");
+        } catch (Exception e){
+            throw new RuntimeException("Operator \"" + name + "\" Does NOT exist.");
         }
         return (TreeNode) o;
     }

@@ -11,11 +11,11 @@ public class SExpressionTest {
     @Test
     public void getPrimitiveFunction() throws NoSuchMethodException {
         Context context = new Context();
-        SExpression rootNode = new SExpression("(100 5 10)");
-
+        SExpression rootNode = new SExpression("(list 100 5 10)");
+        SExpression operands = (SExpression) rootNode.evaluate(context);
+        SExpression s = (SExpression) operands.car();
         Method m = SExpression.class.getDeclaredMethod("findPrimitiveFunction", String.class, SExpression.class, Class.class);
         m.setAccessible(true);
-        SExpression s = (SExpression) rootNode.getChildNodes().get(0);
         TreeNode result;
         try {
             result = (TreeNode) m.invoke(s,"add", s, PrimitiveFunctions.class);
