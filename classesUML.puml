@@ -15,7 +15,21 @@ class Atom
 class SExpression
 
 class PrimitiveFunctions
-class SymbolPatterns
+class SymbolPatterns{
+   + String ( WHITESPACE )
+   + String ( NUMBER )
+   + String (BOOLEAN)
+   + String ( LITERAL )
+   + String ( Valid_Function_Name )
+   + String ( VALID_VARIABLE_NAME )
+   + String ( ARITHMETIC_OPERATOR )
+   + String ( LOGIC_OPERATOR )
+   + String ( EXPRESSION_OPENER )
+   + String ( EXPRESSION_CLOSER )
+
+
+
+}
 
 Parser "uses" ..> TreeNode
 
@@ -33,6 +47,10 @@ class Lexer {
 
 class Parser {
     + buildTree ( ArrayList<String> ) : TreeNode
+    + buildTree ( String ) : TreeNode
+    + buildTree ( List<String> ) : TreeNode
+
+
 }
 
 class Interpreter {
@@ -53,6 +71,13 @@ class TreeNode <<Abstract>>{
 class Atom {
     - value : String
     + toString() : String
+    + boolValue : (Boolean)
+    + numeric :  (int)
+    + numeric :  (double)
+
+
+
+
 }
 
 class SExpression {
