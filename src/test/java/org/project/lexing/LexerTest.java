@@ -18,6 +18,7 @@ public class LexerTest {
         List<String> expectedArray = Arrays.asList("(", "list" ,"1", "(", ")", "some", "Tokens", ")");
         Lexer l = new Lexer();
         List<String> a = l.getTokens(expression);
+        System.out.println(a.toString());
         assertTrue(expectedArray.equals(l.getTokens(expression)));
     }
     @Test

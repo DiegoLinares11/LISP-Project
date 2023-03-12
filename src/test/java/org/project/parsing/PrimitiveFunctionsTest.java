@@ -149,14 +149,14 @@ public class PrimitiveFunctionsTest {
     @Test
     public void print() {
         Context context = new Context();
-        TreeNode s = new SExpression("(print (quote (hello world)))");
+        TreeNode s = new SExpression("(print \"hello world\")");
         SExpression result = (SExpression) s.evaluate(context);
     }
 
        @Test
     public void cond() {
         Context context = new Context();
-        TreeNode s = new SExpression("(cond (  ((= a b) (+ 2 2))  (T (- 2 2) (+ 3 2))  ) )");
+        TreeNode s = new SExpression("(cond (  ((= a b) (+ 2 2))  (T (- 2 2))  ) )");
         SExpression result = (SExpression) s.evaluate(context);
         assertEquals(0.0d, nodeAsNumeric(result.getNode(0)), 0.5);
     }
