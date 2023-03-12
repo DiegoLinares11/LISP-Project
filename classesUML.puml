@@ -43,6 +43,8 @@ class Lexer {
     - streamToString (Stream) : String
     - prepare( Stream ) : String
     - divide (String) : ArrayList<String>
+    - wrap (String) : String
+
 }
 
 class Parser {
@@ -71,9 +73,9 @@ class TreeNode <<Abstract>>{
 class Atom {
     - value : String
     + toString() : String
-    + boolValue : (Boolean)
-    + numeric :  (int)
-    + numeric :  (double)
+    + isAtom() : Boolean
+    + Atom() :  int
+    + Atom() :  double
 
 
 
