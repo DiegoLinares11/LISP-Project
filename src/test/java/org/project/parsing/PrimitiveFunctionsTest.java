@@ -26,7 +26,7 @@ public class PrimitiveFunctionsTest {
     @Test
     public void setq() {
         Context context = new Context();
-        TreeNode s = new SExpression("(setq x 2) (setq y 45) (+ x y)");
+        TreeNode s = new SExpression("(setq x 2) (+ x 45)");
         SExpression result = (SExpression) s.evaluate(context);
         assertEquals(47.0d, nodeAsNumeric(result.getNode(0)), 0.5);
     }

@@ -54,11 +54,16 @@ public class LispPrimitiveFunctions {
     public static TreeNode setq(List<TreeNode> args, Context context){
         areArgumentsValid(args, "setq", 2, Integer::equals);
         TreeNode variableName = getFirstMember(args);
+        setq(variableName, args.get(1),context);
+        return null;
+    }
+
+    public static TreeNode setq(TreeNode variableName, TreeNode variableValue, Context context){
         if (!variableName.toString().matches(Patterns.VALID_VARIABLE_NAME))
-            throw new RuntimeException("\n\tERROR on : setq" + args.toString()
+            throw new RuntimeException("\n\tERROR on : "
+                    + "setq" + variableName.toString() + " " + variableValue.toString()
                     + "\n\tIlegal variable name: " + variableName.toString()
-                    + "\n\tArgs must follow regex pattern: " + Patterns.VALID_FUNCTION_NAME);
-        TreeNode variableValue = args.get(1);
+                    + "\n\tArgs must follow regex pattern: " + Patterns.VALID_VARIABLE_NAME);
         context.setVariable(variableName.toString(), variableValue);
         return null;
     }
