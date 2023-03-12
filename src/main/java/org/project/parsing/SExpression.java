@@ -2,11 +2,13 @@ package org.project.parsing;
 
 import org.project.lexing.Lexer;
 import org.project.lexing.Patterns;
+import org.project.parsing.primitiveFunctions.ArithmeticFunctions;
+import org.project.parsing.primitiveFunctions.LispPrimitiveFunctions;
+import org.project.parsing.primitiveFunctions.LogicFunctions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /** Type of TreeNode that CAN HAVE CHILD NODES, which can be atoms or other SExpressions.
@@ -38,7 +40,7 @@ public class SExpression extends TreeNode{
      * Creates an Expression from an already created list of nodes.
      * @param nodes Nodes.
      */
-    public SExpression(ArrayList<TreeNode> nodes){
+    public SExpression(List<TreeNode> nodes, boolean clone ){
         this.childNodes.addAll(nodes);
     }
 
@@ -63,34 +65,70 @@ public class SExpression extends TreeNode{
         evaluateChildNodes(context);
 
         // Evaluating Expression itself.
-        String operator = this.car().toString(); // Operators are always in the first position.
-        SExpression operands = this.cdr();
+        String operator = this.getNode(0).toString(); // Operators are always in the first position.
+        List<TreeNode> operands = this.getNodes(1, this.childNodes.size());
         TreeNode result = null;
         if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
             switch (operator){
-                case "+" -> result = PrimitiveFunctions.add(operands);
-                case "-" -> result = PrimitiveFunctions.subtraction(operands);
-                case "*" -> result = PrimitiveFunctions.multiplication(operands);
-                case "/" -> result = PrimitiveFunctions.division(operands);
+                case "+" -> result = ArithmeticFunctions.add(operands);
+                case "-" -> result = ArithmeticFunctions.subtraction(operands);
+                case "*" -> result = ArithmeticFunctions.multiplication(operands);
+                case "/" -> result = ArithmeticFunctions.division(operands);
             }
         else if (operator.matches(Patterns.LOGIC_OPERATOR))
             switch (operator){
-                case "=" -> result = PrimitiveFunctions.eq(operands);      // Equal
-                case "/=" -> result = PrimitiveFunctions.ne(operands);     // Not equal
-                case ">" -> result = PrimitiveFunctions.gt(operands);      // Greater than
-                case ">=" -> result = PrimitiveFunctions.ge(operands);     // Greater or equal than
-                case "<" -> result = PrimitiveFunctions.lt(operands);      // Less than
-                case "<=" -> result = PrimitiveFunctions.le(operands);     // Less or equal than
+                case "=" -> result = LogicFunctions.eq(operands);      // Equal
+                case "not" -> result = LogicFunctions.not(operands);   // not
+                case "/=" -> result = LogicFunctions.ne(operands);     // Not equal
+                case ">" -> result = LogicFunctions.gt(operands);      // Greater than
+                case ">=" -> result = LogicFunctions.ge(operands);     // Greater or equal than
+                case "<" -> result = LogicFunctions.lt(operands);      // Less than
+                case "<=" -> result = LogicFunctions.le(operands);     // Less or equal than
+                case "atom" -> result = LogicFunctions.atom(operands); // atom
             }
-        else if (operator.equals("eval"))
-            result = PrimitiveFunctions.eval(operands, context);
-        else if (operator.equals("setq"))
-            result = PrimitiveFunctions.setq(operands, context);
         else {
-            // If nothing works, check if operator is an user defined function.
-            result = findPrimitiveFunction(operator, operands, PrimitiveFunctions.class);
+            try {
+                // Try to find if it is a primitive lisp function.
+                result = findPrimitiveFunction(operator, operands, context, LispPrimitiveFunctions.class);
+            } catch (InvocationTargetException e){
+                System.out.println(e.getCause().getMessage());
+                throw new RuntimeException();
+            } catch (NoSuchMethodException e){
+                // If no method found, check if it is a User's defined function.
+                if(context.functionExist(operator))
+                    System.out.println("Call function");
+                else
+                    throw new RuntimeException("Operator \"" + operator + "\" Does NOT exist.");
+            }
         }
         return result;
+    }
+
+    /**
+     * Returns the "N" CHILD NODE of this SExpression.
+     * Ex child nodes:
+     *  [+ 40, 10] , index = 1
+     * Ex output:
+     * [40]
+     * @param index Node index.
+     * @return Return the child node in the selected index.
+     */
+    public TreeNode getNode(int index){
+        return this.childNodes.get(index);
+    }
+
+    /**
+     * Returns a sublist of nodes, within a given index range.
+     * Ex child nodes:
+     *  [+ 40, 10], start = 1, end = 3
+     * Ex output:
+     * [40, 10]
+     * @param start Start range index, INCLUSIVE.
+     * @param end End range index, EXCLUSIVE.
+     * @return A sublist of childNodes.
+     */
+    public List<TreeNode> getNodes(int start, int end){
+        return this.childNodes.subList(start, end);
     }
 
     private void evaluateChildNodes(Context context){
@@ -105,41 +143,11 @@ public class SExpression extends TreeNode{
                 newChildNodes.add(context.getVariable(childNode.toString()));
             else{
                 TreeNode evaluation = childNode.evaluate(context);
-                if (evaluation != null) // Just adding those child nodes which do not evaluate to null;
+                if (evaluation != null) // Just add those child nodes which don't evaluate to null;
                     newChildNodes.add(evaluation);
             }
         }
         this.childNodes = newChildNodes;
-    }
-
-    /**
-     * Returns the FIRST CHILD NODE of this SExpression.
-     * @return First child node.
-     * Ex child nodes:
-     *  [+ 40, 10]
-     * Ex output:
-     * [+]
-     */
-    public TreeNode car(){
-        if (this.childNodes.size() == 0)
-            throw new RuntimeException("Expression has no child-nodes");
-        return this.childNodes.get(0);
-    }
-
-    /**
-     * Returns the REST OF CHILD NODES which follow the first one.
-     * Ex child nodes:
-     *  [+ 40, 10]
-     * Ex output:
-     * [40, 10]
-     * @return An Expression containing the rest of child nodes.
-     */
-    public SExpression cdr(){
-        if (this.childNodes.size() < 1)
-            throw new RuntimeException("Expression has no enough child-nodes");
-        return new SExpression(new ArrayList<>(
-                this.childNodes.subList(1, this.childNodes.size())
-        ));
     }
 
     /**
@@ -230,21 +238,16 @@ public class SExpression extends TreeNode{
      * @param primitiveFunctions Class to search in.
      * @return Primitive function result.
      */
-    private TreeNode findPrimitiveFunction(String name, SExpression args, Class primitiveFunctions){
+    private TreeNode findPrimitiveFunction(String name, List<TreeNode> args, Context context, Class primitiveFunctions)
+            throws InvocationTargetException, NoSuchMethodException{
         Method m;
         Object o = null;
         try {
-            m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), SExpression.class);
+            m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), List.class, Context.class);
             m.setAccessible(true);
-            o = m.invoke(null, args);
-            if (o.toString().matches(Patterns.BOOLEAN))
-                return new Atom(o.toString());
-            else
-                return (TreeNode) o;
-        } catch (InvocationTargetException e) {
-            System.out.println(e.getCause().getMessage());
-        } catch (Exception e){
-            throw new RuntimeException("Operator \"" + name + "\" Does NOT exist.");
+            o = m.invoke(null, args, context);
+        }catch (IllegalAccessException e){
+            // Statements is never reached.
         }
         return (TreeNode) o;
     }

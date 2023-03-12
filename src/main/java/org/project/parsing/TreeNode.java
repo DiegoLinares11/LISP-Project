@@ -7,7 +7,7 @@ import java.util.List;
  * Representation of a Node, used for representing lisp data. A node can have child nodes, thus
  * forming a tree, of data that could be traversed and evaluated.
  */
-abstract class TreeNode {
+abstract public class TreeNode {
 
     /** List of all Nodes this Node is parent of.*/
     protected List<TreeNode> childNodes = new ArrayList<>();

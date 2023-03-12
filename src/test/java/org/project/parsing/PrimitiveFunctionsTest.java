@@ -19,7 +19,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         SExpression s = new SExpression("(eval (quote (+ 2 3)))");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(5.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(5.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(setq x 2) (setq y 45) (+ x y)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(47.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(47.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(setq x 2) (setq x 45) (+ x 5)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(50.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(50.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(+ 20 50 (+ 2 3))");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(75.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(75.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
 
     }
 
@@ -52,7 +52,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(- 18 7 1)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(10.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(10.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
 
     }
 
@@ -61,7 +61,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(* 3 2 6)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(36.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(36.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
 
     }
 
@@ -70,7 +70,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(/ 100 5 10)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals(2.0d, Double.parseDouble(result.car().toString()), 0.5);
+        assertEquals(2.0d, Double.parseDouble(result.getNode(0).toString()), 0.5);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(not (= hello hello))");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("NIL", result.car().toString());
+        assertEquals("NIL", result.getNode(0).toString());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(= hello hello)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(atom 3)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(/= 3 3)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("NIL", result.car().toString());
+        assertEquals("NIL", result.getNode(0).toString());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(> 5 2)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(>= 5 5)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(< 4 10)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(<= 100 100)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
     @Test
@@ -142,7 +142,13 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(= (/= hello bye) T)");
         SExpression result = (SExpression) s.evaluate(context);
-        assertEquals("T", result.car().toString());
+        assertEquals("T", result.getNode(0).toString());
     }
 
+    @Test
+    public void print() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(print (quote (hello world)))");
+        SExpression result = (SExpression) s.evaluate(context);
+    }
 }
