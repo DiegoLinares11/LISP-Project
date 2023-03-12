@@ -77,4 +77,29 @@ public class LispPrimitiveFunctions {
     //#######################################
     //--------- CONDITIONALS -------
     //#######################################
+    public static TreeNode cond(List<TreeNode> args, Context context){
+        areArgumentsValid(args, "cond", 1, Integer::equals);
+        List<TreeNode> statements = args.get(0).getChildNodes();
+
+        // Loop through each statement ((condition) (body))
+        for(int i= 0; i < statements.size(); i ++){
+            SExpression statement = (SExpression) statements.get(i);
+            if(statement.getChildNodes().size() != 2)
+                throw new RuntimeException("\n\tERROR on : cond" + args.toString()
+                        + "\n\tStatement: " + statement.toString()
+                        + "\n\tEvery statement can just contain 2 elements : condition, body");
+
+            // Evaluating statement's condition.
+            TreeNode condition = statement.getNode(0).evaluate(context);
+            if(!condition.toString().matches(Patterns.BOOLEAN))
+                throw new RuntimeException("Condition of statement: "
+                        + statement.toString()
+                        + " MUST evaluate to a boolean (T, NIl)");
+
+            // If condition evaluates to "T", evaluate its body.
+            if(nodeAsBoolean(condition))
+                return statement.getNode(1).evaluate(context);
+        }
+        return null;
+    }
 }

@@ -135,7 +135,7 @@ public class SExpression extends TreeNode{
         List<TreeNode> newChildNodes = new ArrayList<>();
         // Interchanging variables and evaluating child nodes.
         for(TreeNode childNode : this.childNodes){
-            if(childNode.toString().matches("quote|setq")){ // If operator is "quote" or "setq" STOP evaluation.
+            if(childNode.toString().matches("quote|setq|cond")){ // If operator is "quote" or "setq" STOP evaluation.
                 newChildNodes = this.childNodes;
                 break;
             }
