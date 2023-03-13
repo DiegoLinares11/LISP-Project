@@ -62,7 +62,8 @@ public class LispPrimitiveFunctions {
                     + "setq" + variableName.toString() + " " + variableValue.toString()
                     + "\n\tIlegal variable name: " + variableName.toString()
                     + "\n\tArgs must follow regex pattern: " + Patterns.VALID_VARIABLE_NAME);
-        context.setVariable(variableName.toString(), variableValue);
+
+        context.setVariable(variableName.toString(), variableValue.evaluate(context));
         return null;
     }
 

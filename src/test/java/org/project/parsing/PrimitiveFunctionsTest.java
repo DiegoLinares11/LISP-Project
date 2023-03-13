@@ -91,6 +91,14 @@ public class PrimitiveFunctionsTest {
     }
 
     @Test
+    public void setqWithAVariable() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(setq x 2) (setq y x) (eval y)");
+        SExpression result = (SExpression) s.evaluate(context);
+        assertEquals(2.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
     public void setqTwice() {
         Context context = new Context();
         TreeNode s = new SExpression("(setq x 2) (setq x 45) (+ x 5)");
