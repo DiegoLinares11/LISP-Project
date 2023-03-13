@@ -32,7 +32,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.project.Lisp</mainClass>
+              <mainClass>org.project.JLispCLI</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

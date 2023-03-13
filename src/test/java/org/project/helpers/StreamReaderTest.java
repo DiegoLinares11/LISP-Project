@@ -18,7 +18,7 @@ public class StreamReaderTest {
         File file = new File("./testFiles/getTokensTest.txt");
         String expressionFetched;
         try {
-            expressionFetched = StreamReader.streamToString(new FileInputStream(file));
+            expressionFetched = StreamReader.streamToString(file);
         }  catch (IOException e) {
             throw new RuntimeException(e);
         }

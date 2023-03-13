@@ -1,11 +1,10 @@
 package org.project.helpers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class StreamReader {
-    public static String streamToString (InputStream stream) throws IOException {
+    public static String streamToString (File file) throws IOException {
+        FileInputStream stream = new FileInputStream(file);
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         for (int length; (length = stream.read(buffer)) != -1; ) {

@@ -1,10 +1,7 @@
 package org.project.parsing.primitiveFunctions;
 
 import org.project.lexing.Patterns;
-import org.project.parsing.Context;
-import org.project.parsing.SExpression;
-import org.project.parsing.TreeNode;
-import org.project.parsing.userFunction;
+import org.project.parsing.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +75,14 @@ public class LispPrimitiveFunctions {
         areArgumentsValid(args, "print", 1, Integer::equals);
         System.out.println(getFirstMember(args).toString());
         return null;
+    }
+
+    public static TreeNode concatenate(List<TreeNode> args, Context context){
+        areArgumentsValid(args, "list", 2, (inArgs, reqArgs) -> inArgs > reqArgs);
+        String value = args.stream()
+                .map(TreeNode::toString)
+                .reduce("", String::concat);
+        return new Atom(value);
     }
 
     //#######################################

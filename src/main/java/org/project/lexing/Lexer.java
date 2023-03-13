@@ -1,5 +1,6 @@
 package org.project.lexing;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ public class Lexer {
      * Read the content of a stream, chop it, and return a list of the tokens it contains.
      * Ex input : (+ 3 2)
      * Ex output : ["+", "3", "2"]
-     * @param stream Stream input to read from.
+     * @param file File input to read from.
      * @return A list of the tokens contained in the input.
      */
-    public List<String> getTokens(InputStream stream){
+    public static List<String> getTokens(File file){
         try {
-            String expression = streamToString(stream);     // Read Stream.
+            String expression = streamToString(file);     // Read Stream.
             String depurateTokens = prepare(expression);    // Remove extra whitespaces and newlines.
             depurateTokens = wrap(depurateTokens);          // Wrap everything into parenthesis, to be the parent Expression.
             return divide(depurateTokens);                  // Divide the tokens by whitespaces.
@@ -46,7 +47,7 @@ public class Lexer {
      * @param  expression String input to read from.
      * @return A list of the tokens contained in the input.
      */
-    public List<String> getTokens(String expression){
+    public static List<String> getTokens(String expression){
         String depurateTokens = prepare(wrap(expression));  // Remove extra whitespaces and newlines, and wrap it.
         return divide(depurateTokens);                      // Divide the tokens by whitespaces.
     }
@@ -58,7 +59,7 @@ public class Lexer {
      * @param expression Expression to prepare for future division.
      * @return A String ready to be chopped in tokens..
      */
-    private String prepare (String expression){
+    private static String prepare (String expression){
         return expression
                 .replace(")", " ) ")
                 .replace("(", " ( ")
@@ -76,7 +77,7 @@ public class Lexer {
      * @param expression Expression to chop.
      * @return A list of the tokens.
      */
-    private List<String> divide (String expression){
+    private static List<String> divide (String expression){
         List<String> tokens = new ArrayList<>();
         boolean inStringToken = false;                      // When true, stop splitting by whitespaces.
         StringBuilder tempToken = new StringBuilder();
@@ -112,7 +113,7 @@ public class Lexer {
      * @param expression
      * @return
      */
-    private String wrap (String expression){
+    private static String wrap (String expression){
         return "( list " + expression + " )"; // "list" is added, at the root Node, son can be evaluated.
     }
 }

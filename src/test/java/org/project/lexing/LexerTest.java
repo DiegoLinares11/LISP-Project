@@ -24,13 +24,7 @@ public class LexerTest {
     @Test
     public void getTokensFromStream(){
         List<String> expectedArray = Arrays.asList("(", "list", "This", "is", "a", "test", "another", "line", ")");
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(new File("./testFiles/getTokensTest.txt"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        Lexer l = new Lexer();
-        assertEquals(expectedArray, l.getTokens(stream));
+        File testFile = new File("./testFiles/getTokensTest.txt");
+        assertEquals(expectedArray, Lexer.getTokens(testFile));
     }
 }

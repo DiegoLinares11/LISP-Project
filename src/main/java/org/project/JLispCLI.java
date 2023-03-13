@@ -1,9 +1,12 @@
 package org.project;
 
+import org.project.lexing.Lexer;
+import org.project.parsing.Parser;
+
 import java.io.File;
 
 /** Class for starting LISP INTERPRETER EXECUTION. */
-public class Lisp
+public class JLispCLI
 {
     /** Starts execution by getting the file where operations are*/
     public static void main(String[] args) {
@@ -14,16 +17,17 @@ public class Lisp
             System.out.println("\tExample : java -jar Calculator.jar ./operations.txt");
         }
         else{
-            File operationsFile = new File(args[0]);
+            File lispFile = new File(args[0]);
             // IF FILE NOT EXIST
-            if (!operationsFile.exists()){
+            if (!lispFile.exists()){
                 System.out.println("Not such file exists.");
                 System.out.println("\tTry again, with a valid path.");
             }
             // IF FILE EXIST, START PROGRAM!
             else{
-                Controller controller = Controller.getInstance(operationsFile);
-                controller.start();
+                Interpreter.evaluate(
+                        Parser.buildNodeTree(Lexer.getTokens(lispFile))
+                );
             }
         }
     }

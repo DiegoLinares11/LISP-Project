@@ -212,6 +212,13 @@ public class PrimitiveFunctionsTest {
         SExpression result = (SExpression) s.evaluate(context);
     }
 
+    @Test
+    public void concatenate() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(concatenate Diego joel)");
+        SExpression result = (SExpression) s.evaluate(context);
+    }
+
        @Test
     public void cond() {
         Context context = new Context();
