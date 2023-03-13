@@ -16,7 +16,7 @@ import java.util.List;
  *      ( + 3 (- 2 5)) -> SExpression[ +, 3, SExpression[ -, 2, 5]]
  *  Wil be translated to SExpressions during parsing.
  */
-public class SExpression extends TreeNode{
+public class SExpression extends TreeNode implements Cloneable{
 
     /**
      * Creates an SExpression from a list of tokens.
@@ -41,7 +41,10 @@ public class SExpression extends TreeNode{
      * @param nodes Nodes.
      */
     public SExpression(List<TreeNode> nodes, boolean clone ){
-        this.childNodes.addAll(nodes);
+        if (clone)
+            for (TreeNode node : nodes) this.childNodes.add(node.clone());
+        else
+            this.childNodes.addAll(nodes);
     }
 
     /**
@@ -62,11 +65,11 @@ public class SExpression extends TreeNode{
     @Override
     public TreeNode evaluate(Context context) {
         // Interchanging variables and evaluating child nodes.
-        evaluateChildNodes(context);
+        SExpression newChildNodes = evaluateChildNodes(context);
 
         // Evaluating Expression itself.
-        String operator = this.getNode(0).toString(); // Operators are always in the first position.
-        List<TreeNode> operands = this.getNodes(1, this.childNodes.size());
+        String operator = newChildNodes.getNode(0).toString(); // Operators are always in the first position.
+        List<TreeNode> operands = newChildNodes.getNodes(1, newChildNodes.getChildNodes().size());
         TreeNode result = null;
         if (operator.matches(Patterns.ARITHMETIC_OPERATOR))
             switch (operator){
@@ -96,7 +99,7 @@ public class SExpression extends TreeNode{
             } catch (NoSuchMethodException e){
                 // If no method found, check if it is a User's defined function.
                 if(context.functionExist(operator))
-                    System.out.println("Call function");
+                    result = context.getFunction(operator).evaluate(operands ,context);
                 else
                     throw new RuntimeException("Operator \"" + operator + "\" Does NOT exist.");
             }
@@ -131,23 +134,30 @@ public class SExpression extends TreeNode{
         return this.childNodes.subList(start, end);
     }
 
-    private void evaluateChildNodes(Context context){
-        List<TreeNode> newChildNodes = new ArrayList<>();
+    /**
+     * Given a context, evaluates each child Node of this SExpression.
+     * An return a new List, with the equivalents nodes Evaluated.
+     * @param context Context where this SExpression is run.
+     * @return A list of new nodes.
+     */
+    private SExpression evaluateChildNodes(Context context){
+        List<TreeNode> evaluatedChildNodes = new ArrayList<>();
         // Interchanging variables and evaluating child nodes.
         for(TreeNode childNode : this.childNodes){
-            if(childNode.toString().matches("quote|setq|cond")){ // If operator is "quote" or "setq" STOP evaluation.
-                newChildNodes = this.childNodes;
+            if(childNode.toString().matches("quote|setq|cond|defun"))
+            { // If operator is "quote" or "setq", "cond", or "defun" STOP evaluation.
+                evaluatedChildNodes = this.childNodes;
                 break;
             }
             else if (context.variableExist(childNode.toString()))
-                newChildNodes.add(context.getVariable(childNode.toString()));
+                evaluatedChildNodes.add(context.getVariable(childNode.toString()));
             else{
                 TreeNode evaluation = childNode.evaluate(context);
                 if (evaluation != null) // Just add those child nodes which don't evaluate to null;
-                    newChildNodes.add(evaluation);
+                    evaluatedChildNodes.add(evaluation);
             }
         }
-        this.childNodes = newChildNodes;
+        return new SExpression(evaluatedChildNodes, true);
     }
 
     /**
@@ -250,5 +260,10 @@ public class SExpression extends TreeNode{
             // Statements is never reached.
         }
         return (TreeNode) o;
+    }
+
+    @Override
+    public SExpression clone() {
+        return (SExpression) super.clone();
     }
 }

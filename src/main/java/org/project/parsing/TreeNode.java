@@ -7,7 +7,8 @@ import java.util.List;
  * Representation of a Node, used for representing lisp data. A node can have child nodes, thus
  * forming a tree, of data that could be traversed and evaluated.
  */
-abstract public class TreeNode {
+abstract public class TreeNode implements Cloneable{
+
 
     /** List of all Nodes this Node is parent of.*/
     protected List<TreeNode> childNodes = new ArrayList<>();
@@ -80,5 +81,16 @@ abstract public class TreeNode {
     @Override
     public String toString() {
         return String.join(" ", this.childNodes.toString());
+    }
+
+    @Override
+    public TreeNode clone() {
+        try {
+            TreeNode clone = (TreeNode) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

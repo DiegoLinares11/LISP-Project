@@ -6,7 +6,7 @@ package org.project.parsing;
  * - hello (Text)
  * - NIL (Booleans)
  * Will be translated to atoms during parsing. */
-public class Atom extends TreeNode {
+public class Atom extends TreeNode implements Cloneable{
 
     /**Stored value, could be a number, text of boolean.*/
     private String value;
@@ -72,5 +72,12 @@ public class Atom extends TreeNode {
     @Override
     public String toString() {
         return this.value;
+    }
+
+    @Override
+    public Atom clone() {
+        Atom clone = (Atom) super.clone();
+        // TODO: copy mutable state here, so the clone can't change the internals of the original
+        return clone;
     }
 }

@@ -24,6 +24,65 @@ public class PrimitiveFunctionsTest {
     }
 
     @Test
+    public void list() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(list 2)");
+        SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
+        //assertEquals(47.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
+    public void defun() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(defun owo (a b) (+ a b)) (owo 2 3)");
+        SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
+        //assertEquals(47.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
+    public void defunForFarenheitToCelsiusConversion() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(defun toFarenheit (Celcius)\n" +
+                "(+ (* Celcius 1.8) 32))\n" +
+                "(print (toFarenheit 3))");
+        SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
+        //assertEquals(47.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
+    public void defunFibonacci() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(defun fibonacci (n)\n" +
+                "    (cond \n" +
+                "        ((< n 2) 1)" +
+                "        (T (+ (fibonacci (- n 1)) (fibonacci (- n 2))))\n" +
+                "    )\n" +
+                ")\n" +
+                "(fibonacci 5)");
+        SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
+        assertEquals(8.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
+    public void Factorial() {
+        Context context = new Context();
+        TreeNode s = new SExpression("(defun factorial (num) \n" +
+                "   (cond \n" +
+                "        ((> num 1) (* num (factorial (- num 1))))\n" +
+                "        (T 1)\n" +
+                "   )\n" +
+                ")\n" +
+                "(factorial 3)");
+        SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
+        assertEquals(6.0d, nodeAsNumeric(result.getNode(0)), 0.5);
+    }
+
+    @Test
     public void setq() {
         Context context = new Context();
         TreeNode s = new SExpression("(setq x 2) (+ x 45)");
@@ -156,7 +215,7 @@ public class PrimitiveFunctionsTest {
        @Test
     public void cond() {
         Context context = new Context();
-        TreeNode s = new SExpression("(cond (  ((= a b) (+ 2 2))  (T (- 2 2))  ) )");
+        TreeNode s = new SExpression("(cond ((= a b) (+ 2 2))  (T (- 2 2))  )");
         SExpression result = (SExpression) s.evaluate(context);
         assertEquals(0.0d, nodeAsNumeric(result.getNode(0)), 0.5);
     }

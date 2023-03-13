@@ -4,6 +4,7 @@ import org.project.lexing.Patterns;
 import org.project.parsing.Context;
 import org.project.parsing.SExpression;
 import org.project.parsing.TreeNode;
+import org.project.parsing.userFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,17 +81,45 @@ public class LispPrimitiveFunctions {
     }
 
     //#######################################
+    //--------- CUSTOM FUNCTIONS -------
+    //#######################################
+
+    public static TreeNode defun(List<TreeNode> args, Context context){
+        areArgumentsValid(args, "defun", 3, Integer::equals);
+        TreeNode functionName = args.get(0);
+        TreeNode functionArgs = args.get(1);
+        TreeNode functionBody = args.get(2);
+
+        if (!functionName.toString().matches(Patterns.VALID_FUNCTION_NAME))
+            throw new RuntimeException("\n\tERROR on : "
+                + "defun" + args.toString()
+                + "\n\tIlegal function name: " + functionName.toString()
+                + "\n\tFunction's names must follow regex pattern: " + Patterns.VALID_FUNCTION_NAME);
+        if (functionArgs.isAtom())
+            throw new RuntimeException("\n\tERROR on : "
+                    + "defun" + args.toString()
+                    + "\n\tIlegal args: " + functionArgs.toString()
+                    + "\n\tArgs MUST be encapsulated in a SExpression.");
+        if (functionBody.isAtom())
+            throw new RuntimeException("\n\tERROR on : "
+                    + "defun" + args.toString()
+                    + "\n\tIlegal body: " + functionBody.toString()
+                    + "\n\tFunction body MUST be a SExpression.");
+        context.setFunction(functionName.toString(),
+                new userFunction(functionName.toString(), functionArgs, functionBody));
+        return null;
+    }
+
+    //#######################################
     //--------- CONDITIONALS -------
     //#######################################
-    public static TreeNode cond(List<TreeNode> args, Context context){
-        areArgumentsValid(args, "cond", 1, Integer::equals);
-        List<TreeNode> statements = args.get(0).getChildNodes();
-
+    public static TreeNode cond(List<TreeNode> statements, Context context){
+        areArgumentsValid(statements, "cond", 0, (inArgs, reqArgs) -> inArgs > reqArgs);
         // Loop through each statement ((condition) (body))
         for(int i= 0; i < statements.size(); i ++){
             SExpression statement = (SExpression) statements.get(i);
             if(statement.getChildNodes().size() != 2)
-                throw new RuntimeException("\n\tERROR on : cond" + args.toString()
+                throw new RuntimeException("\n\tERROR on : cond" + statement.toString()
                         + "\n\tStatement: " + statement.toString()
                         + "\n\tEvery statement can just contain 2 elements : condition, body");
 
