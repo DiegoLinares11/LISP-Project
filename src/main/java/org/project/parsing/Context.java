@@ -5,19 +5,25 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class Context {
-    private final Map<String, TreeNode> variables = new HashMap<>();
-    private final Map<String, Function> customFunctions = new HashMap<>();
+    private Map<String, TreeNode> variables = new HashMap<>();
+    private Map<String, userFunction> customFunctions = new HashMap<>();
     private Context parentContext;
 
     public Context (){}
+
+    public void setCustomFunctions(Map<String, userFunction> customFunctions) {
+        this.customFunctions = customFunctions;
+    }
+
+    public Map<String, userFunction> getCustomFunctions() {
+        return customFunctions;
+    }
 
     public Context (Context parentContext){
         this.parentContext = parentContext;
     }
 
     public boolean variableExist (String variableName){
-        if (this.variables.isEmpty())
-            return false;
         if (this.variables.containsKey(variableName))
             return true;
         if (this.parentContext != null)
@@ -25,13 +31,11 @@ public class Context {
         return false;
     }
 
-    public boolean functionExist (String variableName){
-        if (this.customFunctions.isEmpty())
-            return false;
-        if (this.customFunctions.containsKey(variableName))
+    public boolean functionExist (String functionName){
+        if (this.customFunctions.containsKey(functionName))
             return true;
         if (this.parentContext != null)
-            return parentContext.functionExist(variableName);
+            return parentContext.functionExist(functionName);
         return false;
     }
 
@@ -44,8 +48,8 @@ public class Context {
             return value;
     }
 
-    public Function getFunction (String functionName){
-        Function value = this.customFunctions.get(functionName);
+    public userFunction getFunction (String functionName){
+        userFunction value = this.customFunctions.get(functionName);
         if (value == null && this.parentContext != null)  // If not found, try in parent context.
             value = this.parentContext.getFunction(functionName);
         if (value == null)
@@ -58,8 +62,8 @@ public class Context {
         this.variables.put(variableName, value);
     }
 
-    public void setFunction(String functionName, TreeNode value){
-        this.variables.put(functionName, value);
+    public void setFunction(String functionName, userFunction value){
+        this.customFunctions.put(functionName, value);
     }
 
 }
