@@ -15,13 +15,24 @@ public class LispPrimitiveFunctions {
     //#######################################
 
     public static TreeNode car (List<TreeNode> args, Context context){
-        areArgumentsValid(args, "car", 0, (inArgs, reqArgs) -> inArgs > reqArgs);
-        return getFirstMember(args);
+        areArgumentsValid(args, "car", 1, Integer::equals);
+        if (getFirstMember(args).isAtom())
+            throw new RuntimeException("\n\tERROR on : "
+                    + "car" + args.toString()
+                    + "\n\tIlegal args: Car must recibe an SExpression not an Atom.");
+        SExpression sExpression = (SExpression) getFirstMember(args);
+        return sExpression.getNode(0);
     }
 
     public static TreeNode cdr (List<TreeNode> args, Context context){
-        areArgumentsValid(args, "cdr", 0, (inArgs, reqArgs) -> inArgs > reqArgs);
-        return new SExpression(getRemainingMembers(args), true);
+        areArgumentsValid(args, "cdr", 1, Integer::equals);
+        if (getFirstMember(args).isAtom())
+            throw new RuntimeException("\n\tERROR on : "
+                    + "car" + args.toString()
+                    + "\n\tIlegal args: Car must recibe an SExpression not an Atom.");
+        SExpression sExpression = (SExpression) getFirstMember(args);
+        return new SExpression(
+                getRemainingMembers(sExpression.getChildNodes()),true);
     }
 
     public static TreeNode list (List<TreeNode> args, Context context){
@@ -67,11 +78,7 @@ public class LispPrimitiveFunctions {
         return null;
     }
 
-    /**
-     * Prints the following Node, and return it.
-     * @param args Node to print. Can just be one.
-     * @return The given node.
-     */
+
     public static TreeNode print(List<TreeNode> args, Context context){
         areArgumentsValid(args, "print", 1, Integer::equals);
         System.out.println(getFirstMember(args).toString());
