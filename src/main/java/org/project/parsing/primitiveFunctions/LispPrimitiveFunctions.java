@@ -86,7 +86,7 @@ public class LispPrimitiveFunctions {
     }
 
     public static TreeNode concatenate(List<TreeNode> args, Context context){
-        areArgumentsValid(args, "list", 2, (inArgs, reqArgs) -> inArgs > reqArgs);
+        areArgumentsValid(args, "list", 1, (inArgs, reqArgs) -> inArgs > reqArgs);
         String value = args.stream()
                 .map(TreeNode::toString)
                 .reduce("", String::concat);
