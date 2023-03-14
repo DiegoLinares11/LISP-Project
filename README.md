@@ -28,25 +28,25 @@ Elaborado con java 17 y maven.
 2. En un archivo escribir el código Lisp a interpretar
    
    ```lisp
-   ;./Fibonacci.lisp
+   ;./Fibonacci.lisp, (Copiar sin los comentarios).
    
    (defun fibonacci (n)
-       (cond 
+       (cond
            ((< n 2) n)
-           (t ( + (fibonacci (- n 1)) (fibonacci (- n 2)) ))
+           (T ( + (fibonacci (- n 1)) (fibonacci (- n 2))))
        )
    )
    
-   (fibonacci 5)
+   (print (fibonacci 5))
    ; Prints 5
    ```
 
-3. Ejecutar  `javaLisp.jar` pasando el archivo a interpretar como argumento
+3. Ejecutar  `javaLisp.jar` pasando el archivo a interpretar como argumento.
    
    ```bash
-   java -jar ./javaLisp.jar <codigo.lisp>
+   java -jar ./JLisp.jar <codigo.lisp>
    Ejemplo
-   java -jar ./javaLisp.jar ./Fibonacci.lisp
+   java -jar ./JLisp.jar ./Fibonacci.lisp
    ```
 
 #### Problemas en Windows
@@ -63,11 +63,9 @@ Pero para empezar el interpreta se compone de 3 partes principales
 
 1. **Lexer**: Rompe una expresion dado en palabras significativas llamadas *"tokens"*
 
-2. **Parser**: Recibe una lista de *tokens* y los analiza segun unas reglas gramáticas, para luego construir *"árboles de nodos"* que representan instrucciones que si pueden ser ejecutadas por java ( o ll lenguaje que se desee).
+2. **Parser**: Recibe una lista de *tokens* y los analiza segun unas reglas gramáticas, para luego construir *"árboles de nodos"* que representan instrucciones que si pueden ser ejecutadas por java ( o el lenguaje que se desee).
 
 3. **Interpreter**: Recibe arboles de instrucciones y los ejecuta.
-
-
 
 A continuacion puedes ver un Diagrama UML de todas las clases y como se relacionan entre ellas:
 
