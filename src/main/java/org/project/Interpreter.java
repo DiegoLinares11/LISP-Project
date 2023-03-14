@@ -32,9 +32,10 @@ public class Interpreter {
     /**
      * Evaluates a lisp Tree node.
      * @param rootNode Node to evaluate.
+     * @return Evaluated node.
      */
-    public static void evaluate (TreeNode rootNode){
+    public static TreeNode evaluate (TreeNode rootNode){
         Context rootContext = new Context();
-        rootNode.evaluate(rootContext);
+        return rootNode.evaluate(rootContext);
     }
 }
