@@ -41,7 +41,7 @@ Elaborado con java 17 y maven.
    ; Prints 5
    ```
 
-3. Ejecutar  `javaLisp.jar` pasando el archivo a interpretar como argumento.
+3. Ejecutar  `JLisp.jar` pasando el archivo a interpretar como argumento.
    
    ```bash
    java -jar ./JLisp.jar <codigo.lisp>
