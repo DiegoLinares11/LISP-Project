@@ -2,11 +2,10 @@ package org.project.lexing;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.project.helpers.StreamReader.streamToString;
+import static org.project.helpers.StreamReader.fileToString;
 
 /** Representation of a LEXICAL ANALYZER... which means: it reads an input and gets its TOKENS
  * (The Smallest lexical particles which have a meaning on LISP). Conforming the FIRST LAYER of code analysis.
@@ -23,7 +22,7 @@ import static org.project.helpers.StreamReader.streamToString;
 public class Lexer {
 
     /**
-     * Read the content of a stream, chop it, and return a list of the tokens it contains.
+     * Read the content of a file, chop it, and return a list of the tokens it contains.
      * Ex input : (+ 3 2)
      * Ex output : ["+", "3", "2"]
      * @param file File input to read from.
@@ -31,7 +30,7 @@ public class Lexer {
      */
     public static List<String> getTokens(File file){
         try {
-            String expression = streamToString(file);     // Read Stream.
+            String expression = fileToString(file);     // Read Stream.
             String depurateTokens = prepare(expression);    // Remove extra whitespaces and newlines.
             depurateTokens = wrap(depurateTokens);          // Wrap everything into parenthesis, to be the parent Expression.
             return divide(depurateTokens);                  // Divide the tokens by whitespaces.
@@ -53,7 +52,7 @@ public class Lexer {
     }
 
     /**
-     * Format a string for get its tokens, by removing extra whitespaces and newline characters..
+     * Format a string to get its tokens, by removing extra whitespaces and newline characters.
      * Ex input: "(+ 32 \n 2)"
      * Ex output: " ( + 32 2 ) "
      * @param expression Expression to prepare for future division.
@@ -107,7 +106,7 @@ public class Lexer {
 
     /**
      * Adds "(" ")" at the start and end of and expression.
-     * Used to make sure everything is wrapped within a root SExpression.
+     * Used to make sure everything will be wrapped within a root SExpression.
      * Ex input : " + 3 2 "
      * Ex output : " ( + 3 2 ) "
      * @param expression

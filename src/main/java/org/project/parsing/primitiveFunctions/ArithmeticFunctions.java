@@ -6,6 +6,9 @@ import org.project.parsing.TreeNode;
 import java.util.List;
 import static org.project.parsing.primitiveFunctions.functionHelper.*;
 
+/**
+ * Defines the basic arithmetic operators available in Lisp.
+ */
 public class ArithmeticFunctions {
 
     //#######################################

@@ -8,6 +8,22 @@ import static org.project.parsing.primitiveFunctions.functionHelper.nodeAsNumeri
 public class PrimitiveFunctionsTest {
 
     @Test
+    public void car() {
+        Context context = new Context();
+        SExpression s = new SExpression("(car (quote (+ 2 3)))");
+        TreeNode result = s.evaluate(context);
+        assertEquals("[+]", result.toString());
+    }
+
+    @Test
+    public void cdr() {
+        Context context = new Context();
+        SExpression s = new SExpression("(cdr (quote (+ 2 3)))");
+        TreeNode result = s.evaluate(context);
+        assertEquals("[[2, 3]]", result.toString());
+    }
+
+    @Test
     public void quote() {
         Context context = new Context();
         SExpression s = new SExpression("(quote (+ 2 3))");
@@ -225,6 +241,7 @@ public class PrimitiveFunctionsTest {
         Context context = new Context();
         TreeNode s = new SExpression("(concatenate Diego joel)");
         SExpression result = (SExpression) s.evaluate(context);
+        System.out.println(result);
     }
 
        @Test

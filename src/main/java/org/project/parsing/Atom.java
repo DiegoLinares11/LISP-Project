@@ -43,7 +43,7 @@ public class Atom extends TreeNode implements Cloneable{
     }
 
     /**
-     * Report this is not an Expression.
+     * Report this is not an SExpression.
      * @return False, because an Atom IS NOT an SExpression.
      */
     @Override
@@ -52,7 +52,7 @@ public class Atom extends TreeNode implements Cloneable{
     }
 
     /**
-     * Evaluates an atom. Since an atom cannot be broken in smaller Sexpressions.
+     * Evaluates an atom. Since an atom cannot be broken in smaller SExpressions.
      * It just returns itself.
      * @param context Context of user defined variables and functions.
      * @return

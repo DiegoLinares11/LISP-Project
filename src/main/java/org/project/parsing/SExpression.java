@@ -11,15 +11,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Type of TreeNode that CAN HAVE CHILD NODES, which can be atoms or other SExpressions.
- *  Expressions like:
+/** Or Symbolic Expression is a type of TreeNode that CAN HAVE CHILD NODES,
+ * which can be atoms or other SExpressions.
+ *  SExpressions like:
  *      ( + 3 (- 2 5)) -> SExpression[ +, 3, SExpression[ -, 2, 5]]
  *  Wil be translated to SExpressions during parsing.
  */
 public class SExpression extends TreeNode implements Cloneable{
 
     /**
-     * Creates an SExpression from a list of tokens.
+     * Creates an Expression from a list of tokens.
      * @param tokens Tokens to parse.
      */
     public SExpression(List<String> tokens){
@@ -57,9 +58,9 @@ public class SExpression extends TreeNode implements Cloneable{
     }
 
     /**
-     * Evaluates this Sexpression recursively, by first evaluating its Child Nodes, and then
-     * evaluating itself.
-     * @param context Context of user defined variables and functions.
+     * Evaluates this Expression recursively, by first evaluating its Child Nodes, and then
+     * evaluating itself. Every Expression must start with an operator.
+     * @param context Current context of user defined variables and functions.
      * @return Tree node containing the result.
      */
     @Override
@@ -161,10 +162,10 @@ public class SExpression extends TreeNode implements Cloneable{
     }
 
     /**
-     * When Parsing checks, if a list of tokens is a valid lisp expression.
-     * By scan the position and number of parenthesis, in an list o tokens.
+     * When Parsing, checks if a list of tokens is a valid lisp expression,
+     * By scanning the position and number of parenthesis in a list o tokens.
      * Ex input:
-     *  () + 3 (- 2 5) -> Incomplete
+     *  (((( + 3 (- 2 5) -> Incomplete
      *  Ex output:
      *  false
      * @param tokens Tokens to analyze.
@@ -212,7 +213,7 @@ public class SExpression extends TreeNode implements Cloneable{
     }
 
     /**
-     * Constructor Helper. Takes a list of tokens, checks if are a valid Lisp Expression
+     * Constructor Helper. Takes a list of tokens, checks if they are a valid Lisp Expression
      * and parse them to a tree of nodes. Finishing by returning the root node. It is done recursively.
      * @param tokens Tokens to parse.
      */
@@ -242,7 +243,7 @@ public class SExpression extends TreeNode implements Cloneable{
 
     /**
      * Try to find a primitive lisp function within a class through Java Reflection,
-     * invoke it, and return the evaluated TreeNode..
+     * invoke it, and return the evaluated TreeNode.
      * @param name Primitive function name you want to execute. (atom, setq, cond)
      * @param args Function's args.
      * @param primitiveFunctions Class to search in.
@@ -256,9 +257,7 @@ public class SExpression extends TreeNode implements Cloneable{
             m = primitiveFunctions.getDeclaredMethod(name.toLowerCase(), List.class, Context.class);
             m.setAccessible(true);
             o = m.invoke(null, args, context);
-        }catch (IllegalAccessException e){
-            // Statements is never reached.
-        }
+        }catch (IllegalAccessException e){} // Statement is never reached.
         return (TreeNode) o;
     }
 

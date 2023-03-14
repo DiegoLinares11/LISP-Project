@@ -8,6 +8,9 @@ import java.util.List;
 
 import static org.project.parsing.primitiveFunctions.functionHelper.*;
 
+/**
+ * Defines the primitives operators available in Lisp.
+ */
 public class LispPrimitiveFunctions {
 
     //#######################################
@@ -131,6 +134,7 @@ public class LispPrimitiveFunctions {
         // Loop through each statement ((condition) (body))
         for(int i= 0; i < statements.size(); i ++){
             SExpression statement = (SExpression) statements.get(i);
+
             if(statement.getChildNodes().size() != 2)
                 throw new RuntimeException("\n\tERROR on : cond" + statement.toString()
                         + "\n\tStatement: " + statement.toString()

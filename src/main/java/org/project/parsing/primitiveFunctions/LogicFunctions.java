@@ -2,13 +2,15 @@ package org.project.parsing.primitiveFunctions;
 
 import org.project.lexing.Patterns;
 import org.project.parsing.Atom;
-import org.project.parsing.Context;
 import org.project.parsing.TreeNode;
 
 import java.util.List;
 
 import static org.project.parsing.primitiveFunctions.functionHelper.*;
 
+/**
+ * Defines the basic logic operators available in Lisp.
+ */
 public class LogicFunctions {
 
     //#######################################

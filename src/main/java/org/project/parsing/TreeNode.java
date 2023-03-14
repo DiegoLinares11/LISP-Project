@@ -14,6 +14,7 @@ abstract public class TreeNode implements Cloneable{
     protected List<TreeNode> childNodes = new ArrayList<>();
 
     /**
+     * @deprecated
      * Transforms a list of tokens in a Node.
      * @param tokens A valid list of tokens (Following Lisp sintaxis).
      * @return A Node that represents the given data.
@@ -28,6 +29,7 @@ abstract public class TreeNode implements Cloneable{
     }
 
     /**
+     * @deprecated
      * Transforms a string input in a Node.
      * @param value A valid list of tokens (Following Lisp sintaxis).
      * @return A Node that represents the given data.
@@ -40,6 +42,7 @@ abstract public class TreeNode implements Cloneable{
     }
 
     /**
+     * @deprecated
      * Returns a Node containing a given bool value.
      * @param boolValue Bool value.
      * @return A Node that represents the given data.
@@ -49,6 +52,7 @@ abstract public class TreeNode implements Cloneable{
     }
 
     /**
+     * @deprecated
      * Returns a Node containing a given numeric value.
      * @param numeric numeric value.
      * @return A Node that represents the given data.
@@ -87,7 +91,6 @@ abstract public class TreeNode implements Cloneable{
     public TreeNode clone() {
         try {
             TreeNode clone = (TreeNode) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
