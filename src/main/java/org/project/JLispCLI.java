@@ -10,8 +10,13 @@ public class JLispCLI
 {
     /** Starts execution by getting the file where operations are*/
     public static void main(String[] args) {
+        // IF HELP COMMAND IS CALLED
+        if (args.length > 0 && args[0].equals("help")) {
+            System.out.println("Here will go all the commands available in the program.");
+        }
         // IF NO FILE PATH GIVEN.
         if (args.length == 0){
+            
             System.out.println("No file path for calculation given");
             System.out.println("\tTry : java -jar <jarName> <filePath>");
             System.out.println("\tExample : java -jar Calculator.jar ./operations.txt");
@@ -30,8 +35,5 @@ public class JLispCLI
                 );
             }
         }
-    }
-    public static void getCommand(){
-        
     }
 }
