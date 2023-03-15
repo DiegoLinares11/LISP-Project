@@ -31,4 +31,7 @@ public class JLispCLI
             }
         }
     }
+    public static void getCommand(){
+        
+    }
 }
