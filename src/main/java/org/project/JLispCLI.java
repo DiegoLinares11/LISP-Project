@@ -6,8 +6,6 @@ import org.project.parsing.TreeNode;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 /** Class for starting LISP INTERPRETER EXECUTION. */
@@ -76,6 +74,7 @@ public class JLispCLI
         catch (Exception e) {
             System.out.println("Error when written");
         }
+
     }
     private static void clearFile(String filePath)
     { 
