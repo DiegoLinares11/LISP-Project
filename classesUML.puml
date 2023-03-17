@@ -5,7 +5,10 @@ class Lisp
 class Lexer
 class Parser
 class Interpreter
-
+class ArithmeticFunctions
+class functionHelper
+class LogicFunctions
+class Context
 Lisp ..> Lexer
 Lisp ..> Parser
 Lisp ..> Interpreter
@@ -105,4 +108,38 @@ class PrimitiveFunctions{
    + DEFUN ( SExpression )
 
 }
+class ArithmeticFunctions{
+    + add(List<TreeNode>) : TreeNode
+    + substraction(List<TreeNode>) : TreeNode
+    + multiplication(List<TreeNode>) : TreeNode
+    + division(List<TreeNode>) : TreeNode
+
+}
+class functionHelper{
+    + isNodeType(TreeNode String) : boolean
+    + getFirstMember(List<TreeNode>) : TreeNode
+    + getRemainingMembers(List<TreeNode>) : (List<TreeNode>)
+    + nodeAsNumeric (TreeNode) : double
+
+}
+class LogicFunctions {
+    + not(List<TreeNode>) : TreeNode
+    + eq(List<TreeNode>) : TreeNode
+    + ne(List<TreeNode>) : TreeNode
+    + lt(List<TreeNode>) : TreeNode
+    + gt(List<TreeNode>) : TreeNode
+    + ge(List<TreeNode>) : TreeNode
+    + atom(List<TreeNode>) : TreeNode
+
+}
+class Context{
+    -HashMap : Map<String TreeNode>
+    -HashMap : Map<String userFunction>
+    +functionExist (String) : boolean
+    + variableExist (String) : boolean
+    +getVariable(String) : TreeNode
+    +getFunction (String) : userFunction
+
+}
+
 @enduml
