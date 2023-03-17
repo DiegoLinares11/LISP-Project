@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.project.helpers.StreamReader;
 
 import java.io.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ public class LexerTest {
 
     @Test
     public void getTokensTest(){
-        String expression = "1 ( ) \n some Tokens";
+        String expression = "1 ( ) \n some Tokens ; hola";
         List<String> expectedArray = Arrays.asList("(", "list" ,"1", "(", ")", "some", "Tokens", ")");
         Lexer l = new Lexer();
         List<String> a = l.getTokens(expression);
@@ -27,4 +28,5 @@ public class LexerTest {
         File testFile = new File("./testFiles/getTokensTest.txt");
         assertEquals(expectedArray, Lexer.getTokens(testFile));
     }
+
 }

@@ -32,7 +32,7 @@ public class Lexer {
         try {
             String expression = fileToString(file);     // Read Stream.
             String depurateTokens = prepare(expression);    // Remove extra whitespaces and newlines.
-            depurateTokens = wrap(depurateTokens);          // Wrap everything into parenthesis, to be the parent Expression.
+            depurateTokens = removeComments(wrap(depurateTokens));          // Wrap everything into parenthesis, to be the parent Expression.
             return divide(depurateTokens);                  // Divide the tokens by whitespaces.
         } catch (IOException e) {
             throw new RuntimeException("File not found Exception");
@@ -47,7 +47,7 @@ public class Lexer {
      * @return A list of the tokens contained in the input.
      */
     public static List<String> getTokens(String expression){
-        String depurateTokens = prepare(wrap(expression));  // Remove extra whitespaces and newlines, and wrap it.
+        String depurateTokens = prepare(removeComments(wrap(expression)));  // Remove extra whitespaces and newlines, and wrap it.
         return divide(depurateTokens);                      // Divide the tokens by whitespaces.
     }
 
@@ -112,7 +112,18 @@ public class Lexer {
      * @param expression
      * @return
      */
-    private static String wrap (String expression){
-        return "( list " + expression + " )"; // "list" is added, at the root Node, son can be evaluated.
+    public static String wrap (String expression){
+        return "( list " + expression + "\n)"; // "list" is added, at the root Node, son can be evaluated.
+    }
+
+    /**
+     * Removes everything that goes after " ; " (a comment)
+     * @param expression
+     * @return string without comments
+     */
+    public static String removeComments (String expression){
+        return expression.replaceAll(";.*[\\n\\r]", "");
+
     }
 }
+
