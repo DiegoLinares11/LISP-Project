@@ -23,7 +23,7 @@ Elaborado con java 17 y maven.
 
 ## Guia de Uso
 
-1. Descargar el ejecutable` JLisp.jar` [aquí](https://github.com/DiegoLinares11/LISP-Project/releases/tag/V1.0.0).
+1. Descargar el ejecutable `JLisp.jar` [aquí](https://github.com/DiegoLinares11/LISP-Project/releases).
 
 2. Escribir en un archivo el codigo que quieres ejecutar. Ejemplo:
    
