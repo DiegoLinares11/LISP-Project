@@ -6,8 +6,6 @@ import org.project.parsing.TreeNode;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 /** Class for starting LISP INTERPRETER EXECUTION. */
@@ -36,7 +34,8 @@ public class JLispCLI
             }
             // IF FILE EXIST, START PROGRAM!
             else{
-                TreeNode result = Interpreter.evaluate(Parser.buildNodeTree(Lexer.getTokens(lispFile)));
+                TreeNode result = Interpreter.evaluate(
+                        Parser.buildNodeTree(Lexer.getTokens(lispFile)));
                 
                 System.out.println(result.toString());
                 System.out.println("Do you want to save your answer in a .txt file?\nyes/no");
@@ -54,22 +53,18 @@ public class JLispCLI
     private static void saveFile(String result){
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter the path where you want to save you .txt file:");
+            System.out.println("Enter the FOLDER PATH where you want to save you .txt file:");
             String path = scanner.nextLine();
             String filePath = path + "/lispResult.txt"; // set the path of the new file
-            try{ 
                 File file = new File(filePath);
                 FileWriter escribir = new FileWriter(file, true);
                 escribir.write(result);
                 escribir.close();
-                System.out.println("Se creo y guardo el archivo exitosamente");
+                System.out.println("ANSWERS WERE SAVED SUCCESSFULLY!");
             }
-            catch (Exception e){
-                System.out.println("Error al escribir");
-            }
-        }
         catch (Exception e) {
-            System.out.println("Error al escribir");
+            System.out.println("ERROR: Not valid folder path for saving file.");
         }
+
     }
 }
