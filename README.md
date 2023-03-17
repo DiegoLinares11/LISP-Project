@@ -69,4 +69,5 @@ Pero para empezar el interpreta se compone de 3 partes principales
 
 A continuacion puedes ver un Diagrama UML de todas las clases y como se relacionan entre ellas:
 
-![](./classesUML.png)
+
+![](./classesUML.png?)
