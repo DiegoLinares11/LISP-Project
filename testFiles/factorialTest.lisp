@@ -5,4 +5,5 @@
    )
 )
 
+(print (factorial 3))
 (factorial 3)
