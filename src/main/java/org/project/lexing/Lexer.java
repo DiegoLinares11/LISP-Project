@@ -31,8 +31,8 @@ public class Lexer {
     public static List<String> getTokens(File file){
         try {
             String expression = fileToString(file);     // Read Stream.
-            String depurateTokens = prepare(expression);    // Remove extra whitespaces and newlines.
-            depurateTokens = removeComments(wrap(depurateTokens));          // Wrap everything into parenthesis, to be the parent Expression.
+            String depurateTokens = removeComments(wrap(expression));    // Remove extra whitespaces and newlines.
+            depurateTokens = prepare(depurateTokens);          // Wrap everything into parenthesis, to be the parent Expression.
             return divide(depurateTokens);                  // Divide the tokens by whitespaces.
         } catch (IOException e) {
             throw new RuntimeException("File not found Exception");
