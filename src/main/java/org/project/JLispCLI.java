@@ -6,6 +6,7 @@ import org.project.parsing.TreeNode;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /** Class for starting LISP INTERPRETER EXECUTION. */
@@ -16,7 +17,7 @@ public class JLispCLI
     public static void main(String[] args) {
         // IF HELP COMMAND IS CALLED
         if (args.length > 0 && args[0].equals("help")) {
-            System.out.println("Here will go all the commands available in the program.");
+            System.out.println("The lisp functions available in the program:\n+,-,*,/		        Basic arithmetic operators\nprint			Output values to the console\ncond			Conditional statement\nconcatenate		Two or more sequences together to form a new sequence\nsetq			Assign a value to a variable\ndefun			Define a new function in Lisp\nlist			Used to create a new list\ncdr			Retrieve the tail of a list\ncar			Retrieve the head of a list");
         }
         // IF NO FILE PATH GIVEN.
         if (args.length == 0){
