@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-class Lisp
+class JLisp
 class Lexer
 class Parser
 class Interpreter
@@ -9,37 +9,17 @@ class ArithmeticFunctions
 class functionHelper
 class LogicFunctions
 class Context
-Lisp ..> Lexer
-Lisp ..> Parser
-Lisp ..> Interpreter
+JLisp ..> Lexer
+JLisp ..> Parser
+JLisp ..> Interpreter
 
 abstract class TreeNode
 class Atom
 class SExpression
-
 class PrimitiveFunctions
-class SymbolPatterns{
-   + String ( WHITESPACE )
-   + String ( NUMBER )
-   + String (BOOLEAN)
-   + String ( LITERAL )
-   + String ( Valid_Function_Name )
-   + String ( VALID_VARIABLE_NAME )
-   + String ( ARITHMETIC_OPERATOR )
-   + String ( LOGIC_OPERATOR )
-   + String ( EXPRESSION_OPENER )
-   + String ( EXPRESSION_CLOSER )
 
-
-
+class JLisp {
 }
-
-Parser "uses" ..> TreeNode
-SymbolPatterns "uses" ...> SExpression
-TreeNode <|-- "inherits" Atom
-TreeNode <|-- "inherits" SExpression
-SExpression "contains" o--> Atom
- PrimitiveFunctions <- SExpression
 
 class Lexer {
     + getTokens( Stream ) : ArrayList<String>
@@ -54,8 +34,6 @@ class Parser {
     + buildTree ( ArrayList<String> ) : TreeNode
     + buildTree ( String ) : TreeNode
     + buildTree ( List<String> ) : TreeNode
-
-
 }
 
 class Interpreter {
@@ -141,5 +119,17 @@ class Context{
     +getFunction (String) : userFunction
 
 }
+
+Parser "uses" ..> TreeNode
+TreeNode <|-- "inherits" SExpression
+TreeNode <|- "inherits" Atom
+SExpression "contains" o-> Atom
+SExpression ...> ArithmeticFunctions
+SExpression ...> LogicFunctions
+SExpression ...> PrimitiveFunctions
+PrimitiveFunctions ..> functionHelper
+LogicFunctions ..> functionHelper
+ArithmeticFunctions ..> functionHelper
+Parser "uses" ..> Context
 
 @enduml

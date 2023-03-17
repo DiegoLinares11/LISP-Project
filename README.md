@@ -23,12 +23,12 @@ Elaborado con java 17 y maven.
 
 ## Guia de Uso
 
-1. Descargar este repositorio.
+1. Descargar el ejecutable` JLisp.jar` [aquí](https://github.com/DiegoLinares11/LISP-Project/releases/tag/V1.0.0).
 
-2. En un archivo escribir el código Lisp a interpretar
+2. Escribir en un archivo el codigo que quieres ejecutar. Ejemplo:
    
    ```lisp
-   ;./Fibonacci.lisp, (Copiar sin los comentarios).
+   ;./Fibonacci.lisp.
    
    (defun fibonacci (n)
        (cond
@@ -41,7 +41,7 @@ Elaborado con java 17 y maven.
    ; Prints 5
    ```
 
-3. Ejecutar  `JLisp.jar` pasando el archivo a interpretar como argumento.
+3. Ejecutar `JLisp.jar` pasando el archivo a interpretar como argumento.
    
    ```bash
    java -jar ./JLisp.jar <codigo.lisp>
@@ -51,7 +51,7 @@ Elaborado con java 17 y maven.
 
 #### Problemas en Windows
 
-Antes de ejecutarlo, asegurarse que el Java(TM) Platform SE binary, esta activado. 
+Si estas en Windows, asegurate de tener corriendo el interprete de java:  Java(TM) Platform SE binary de fondo.
 
 <img title="" src="./media/jarr.gif" alt="" width="673" data-align="center">
 
