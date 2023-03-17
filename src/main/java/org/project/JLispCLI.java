@@ -37,13 +37,21 @@ public class JLispCLI
             // IF FILE EXIST, START PROGRAM!
             else{
                 TreeNode result = Interpreter.evaluate(Parser.buildNodeTree(Lexer.getTokens(lispFile)));
-                
-                System.out.println(result.toString());
                 System.out.println("Do you want to save your answer in a .txt file?\nyes/no");
                 Scanner scanner = new Scanner(System.in);
                 String input = scanner.nextLine();
                 if (input.equals("yes")){
-                    saveFile(result.toString());
+                    System.out.println("Enter the path where you want to save you .txt file:");
+                    String path = scanner.nextLine();
+                    String filePath = path + "/lispResult.txt"; // set the path of the new file
+                    System.out.println("Do you want to clear the file?\nyes) Clear the file \nno) append current file");
+                    String input2 = scanner.nextLine();
+                    if (input2.equals("yes")){
+                        clearFile(filePath);
+                        saveFile(result.toString(), filePath);
+                    }else{
+                        saveFile(result.toString(), filePath);
+                    }
                 }else{
                     System.out.println("File not Saved.");
                 }
@@ -51,25 +59,34 @@ public class JLispCLI
             }
         }
     }
-    private static void saveFile(String result){
+    private static void saveFile(String result,String filePath){
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter the path where you want to save you .txt file:");
-            String path = scanner.nextLine();
-            String filePath = path + "/lispResult.txt"; // set the path of the new file
             try{ 
                 File file = new File(filePath);
                 FileWriter escribir = new FileWriter(file, true);
                 escribir.write(result);
                 escribir.close();
-                System.out.println("Se creo y guardo el archivo exitosamente");
+                System.out.println("It was succesfully saved.");
             }
             catch (Exception e){
-                System.out.println("Error al escribir");
+                System.out.println("Error when written");
             }
         }
         catch (Exception e) {
-            System.out.println("Error al escribir");
+            System.out.println("Error when written");
+        }
+    }
+    private static void clearFile(String filePath)
+    { 
+        try{
+            FileWriter fw = new FileWriter(filePath, false);
+            PrintWriter pw = new PrintWriter(fw, false);
+            pw.flush();
+            pw.close();
+            fw.close();
+        }catch(Exception exception){
+            System.out.println("Exception have been caught");
         }
     }
 }
