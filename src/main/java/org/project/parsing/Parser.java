@@ -46,8 +46,7 @@ public class Parser {
      * @return Root node of the generated tree.
      */
     public static TreeNode buildNodeTree (String expression){
-        Lexer l = new Lexer();
-        List<String> tokens = l.getTokens(expression);
+        List<String> tokens = Lexer.getTokens(expression);
         return buildHelper(tokens);
     }
 

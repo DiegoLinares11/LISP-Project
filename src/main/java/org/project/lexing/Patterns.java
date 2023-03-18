@@ -15,4 +15,5 @@ public class Patterns {
     public static final String LOGIC_OPERATOR = "=|<|>|<=|>=|/=|not|atom";
     public static final String EXPRESSION_OPENER = "\\(";
     public static final String EXPRESSION_CLOSER = "\\)";
+    public static final String COMMENT = ";.*[\\n\\r]";
 }

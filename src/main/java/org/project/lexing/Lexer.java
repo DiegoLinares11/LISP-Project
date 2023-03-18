@@ -30,10 +30,10 @@ public class Lexer {
      */
     public static List<String> getTokens(File file){
         try {
-            String expression = fileToString(file);     // Read Stream.
-            String depurateTokens = removeComments(wrap(expression));    // Remove extra whitespaces and newlines.
-            depurateTokens = prepare(depurateTokens);          // Wrap everything into parenthesis, to be the parent Expression.
-            return divide(depurateTokens);                  // Divide the tokens by whitespaces.
+            String expression = fileToString(file);                     // Read Stream.
+            String depurateTokens = removeComments(wrap(expression));   // Remove extra whitespaces and newlines.
+            depurateTokens = prepare(depurateTokens);                   // Wrap everything into parenthesis, to be the parent Expression.
+            return divide(depurateTokens);                              // Divide the tokens by whitespaces.
         } catch (IOException e) {
             throw new RuntimeException("File not found Exception");
         }
@@ -48,7 +48,7 @@ public class Lexer {
      */
     public static List<String> getTokens(String expression){
         String depurateTokens = prepare(removeComments(wrap(expression)));  // Remove extra whitespaces and newlines, and wrap it.
-        return divide(depurateTokens);                      // Divide the tokens by whitespaces.
+        return divide(depurateTokens);                                      // Divide the tokens by whitespaces.
     }
 
     /**
@@ -56,7 +56,7 @@ public class Lexer {
      * Ex input: "(+ 32 \n 2)"
      * Ex output: " ( + 32 2 ) "
      * @param expression Expression to prepare for future division.
-     * @return A String ready to be chopped in tokens..
+     * @return A String ready to be chopped in tokens.
      */
     private static String prepare (String expression){
         return expression
@@ -78,18 +78,18 @@ public class Lexer {
      */
     private static List<String> divide (String expression){
         List<String> tokens = new ArrayList<>();
-        boolean inStringToken = false;                      // When true, stop splitting by whitespaces.
+        boolean isStringToken = false;      // When true, stop splitting by whitespaces.
         StringBuilder tempToken = new StringBuilder();
         for (char selectedChar : expression.toCharArray()) {
 
             if(selectedChar == '\"')
-                inStringToken = !inStringToken;
+                isStringToken = !isStringToken;
 
-            if(inStringToken)
+            if(isStringToken)
                 tempToken.append(selectedChar);
 
             else {
-                // If whites space found, end token, and start with the next.
+                // If whitespace found: end current token, and start with the next.
                 if(selectedChar == ' '){
                     tokens.add(tempToken.toString());
                     tempToken.setLength(0);
@@ -117,12 +117,12 @@ public class Lexer {
     }
 
     /**
-     * Removes everything that goes after " ; " (a comment)
+     * Removes comments from an expression.
      * @param expression
      * @return string without comments
      */
     public static String removeComments (String expression){
-        return expression.replaceAll(";.*[\\n\\r]", "");
+        return expression.replaceAll(Patterns.COMMENT, "");
 
     }
 }

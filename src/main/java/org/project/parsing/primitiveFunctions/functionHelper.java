@@ -33,7 +33,7 @@ public class functionHelper {
     /**
      * Check if a set of arguments, fill a function's requirements.
      * Ex:
-     * numArgs = 2 , requiredArgs = (in, req) -> in > req
+     * numArgs = 2 , requiredArgs = (given, required) -> in > req
      * Will mean, that this functions accepts MORE THAN 2 args.
      * @param args Args to check.
      * @param functionName Function's name.
@@ -54,7 +54,7 @@ public class functionHelper {
     /**
      * Check if a set of arguments, fill a function's requirements.
      * Ex:
-     * numArgs = 3 , requiredArgs = (in, req) -> in = req, type = [1-9]+
+     * numArgs = 3 , requiredArgs = (given, required) -> in = req, type = [1-9]+
      * Will mean, that this functions accepts JUST 3 args, and they need to be NUMBERS.
      *
      * @param args Args to check.
