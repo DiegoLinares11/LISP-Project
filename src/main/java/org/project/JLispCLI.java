@@ -49,9 +49,13 @@ public class JLispCLI
         else if (this.parameters.isEmpty()){
             Printer.println("WELCOME TO JLISP INTERPRETER!");
             Printer.println("\tType \"HELP\" for more information\n" +
+                    "\tType \"EXIT\" to end the program\n" +
                     "\tYou can start entering your code now:\n");
-            String input = Printer.input("JLisp >> ", AnsiColors.BLACK, AnsiColors.WHITE_BACKGROUND);
-            runInlineCode(input, commandParser);
+            String input = "";
+            while (!input.equals("EXIT")){
+                input = Printer.input("JLisp >> ", AnsiColors.BLACK, AnsiColors.WHITE_BACKGROUND);
+                result = runInlineCode(input, commandParser);
+            }
         }
 
         // Write results if possible.
@@ -64,9 +68,12 @@ public class JLispCLI
             showHelpMessage(commander);
             return null;
         }
-        else
-            return Interpreter.evaluate(
+        else{
+            TreeNode result = Interpreter.evaluate(
                     Parser.buildNodeTree(Lexer.getTokens(code)));
+            Printer.println(result.toString());
+            return result;
+        }
     }
 
     private static TreeNode runFile(String filepath){
