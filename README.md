@@ -7,7 +7,7 @@
 
 </h1>
 
-Elaborado con java 17 y maven.
+Elaborado con Java 17 y [Maven](https://www.campusmvp.es/recursos/post/java-que-es-maven-que-es-el-archivo-pom-xml.aspx).
 
 **Código fuente:**  [***Aquí***](https://github.com/DiegoLinares11/LISP-Project/tree/master/src/main/java/org/project)  
 
@@ -25,33 +25,71 @@ Elaborado con java 17 y maven.
 
 1. Descargar el ejecutable `JLisp.jar` [aquí](https://github.com/DiegoLinares11/LISP-Project/releases).
 
-2. Escribir en un archivo el codigo que quieres ejecutar. Ejemplo:
-   
-   ```lisp
-   ;./Fibonacci.lisp.
-   
-   (defun fibonacci (n)
-       (cond
-           ((< n 2) n)
-           (T ( + (fibonacci (- n 1)) (fibonacci (- n 2))))
-       )
-   )
-   
-   (print (fibonacci 5))
-   ; Prints 5
-   ```
-
-3. Ejecutar `JLisp.jar` pasando el archivo a interpretar como argumento.
+2. Ejecutar `JLisp.jar` con el siguiente comando.
    
    ```bash
-   java -jar ./JLisp.jar <codigo.lisp>
-   Ejemplo
-   java -jar ./JLisp.jar ./Fibonacci.lisp
+   java -jar ./JLisp.jar
    ```
+
+#### Opciones de comando
+
+Al ejectuarse como un comando en terminal, JLisp tambien puede recibir argumentos opcionales.
+
+**AYUDAAAA!** 😩
+
+Si no sabes como se ejecuta JLisp, recuerda que siempre puedes pedir ayuda asi:
+
+```bash
+java -jar ./JLisp.jar --help
+```
+
+**Leer de un archivo**
+
+Jlisp tambien puede leer codigo guardado en un archivo, lo puedes especificar con la opcion `--input` seguido de la ruta al archivo.
+
+```bash
+java -jar ./JLisp.jar --input <rutaArchivo>
+Ejemplo:
+java -jar ./JLisp.jar --input ./Fibonacci.lisp
+```
+
+Este podría ser un codigo de prueba:
+
+```lisp
+;./Fibonacci.lisp.
+
+(defun fibonacci (n)
+    (cond
+        ((< n 2) n)
+        (T ( + (fibonacci (- n 1)) (fibonacci (- n 2))))
+    )
+)
+
+(print (fibonacci 5))
+; Prints 5
+```
+
+**Guardar resultados**
+
+Por ultimo, tambien puedes guardar los resultados de tus operaciones en un archivo con la opcion `--output`.
+
+```bash
+java -jar ./JLisp.jar --output <rutaArchivo>
+Ejemplo:
+java -jar ./JLisp.jar --output ./resultados.txt
+```
+
+**Combinar varias opciones**
+
+Recuerda que puedes combinar varias opciones a la vez al ejecutar JLisp
+
+```bash
+java -jar ./JLisp.jar --output <rutaArchivo> --input <rutaArchivo>
+```
 
 #### Problemas en Windows
 
-Si estas en Windows, asegurate de tener corriendo el interprete de java:  Java(TM) Platform SE binary de fondo.
+Si estas en Windows, asegurate de tener instalado y corriendo el java JDK o JSE (version >= 17).
 
 <img title="" src="./media/jarr.gif" alt="" width="673" data-align="center">
 
@@ -68,6 +106,5 @@ Pero para empezar el interpreta se compone de 3 partes principales
 3. **Interpreter**: Recibe arboles de instrucciones y los ejecuta.
 
 A continuacion puedes ver un Diagrama UML de todas las clases y como se relacionan entre ellas:
-
 
 ![](./classesUML.png?)
